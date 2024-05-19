@@ -11,11 +11,11 @@ class TicketController extends Controller
 {
     public function show($id)
     {
-        // Zakładam, że zmienna $seance jest również potrzebna w widoku, więc odkomentowuję linię i poprawiam zmienną.
-        $seance = Seance::with(['film', 'screeningRoom.seats'])->findOrFail($id);
+        // Pobierz seans z powiązanymi danymi o filmie i sali kinowej
+        $seance = Seance::with(['film', 'screeningRoom'])->findOrFail($id);
 
-        // Pobierz miejsca, uporządkuj je według kolumny SEAT_IN_ROW i pogrupuj według kolumny ROW.
-        $seats = Seat::where('SCREENING_ROOM_ID', $id)->orderBy('SEAT_IN_ROW')->get();
+        // Pobierz miejsca dla konkretnej sali kinowej i uporządkuj według numeru rzędu i miejsca w rzędzie
+        $seats = Seat::where('screening_room_id', $seance->screeningRoom->id)->orderBy('ROW')->orderBy('SEAT_IN_ROW')->get();
         $seatsGroupedByRow = $seats->groupBy('ROW');
 
         return view('buy_ticket', compact('seance', 'seatsGroupedByRow'));
@@ -26,8 +26,7 @@ class TicketController extends Controller
         $request->validate([
             'seance_id' => 'required|exists:seances,id',
             'seats' => 'required|array',
-            'seats.*.row' => 'required|integer',
-            'seats.*.seat' => 'required|integer',
+            'seats.*.seat_id' => 'required|exists:seats,id',
         ]);
 
         $seanceId = $request->input('seance_id');
@@ -36,11 +35,10 @@ class TicketController extends Controller
         foreach ($seats as $seat) {
             ReservationSeat::create([
                 'seance_id' => $seanceId,
-                'row' => $seat['row'],
-                'seat' => $seat['seat']
+                'seat_id' => $seat['seat_id']
             ]);
         }
 
-        return redirect()->back()->with('success', 'Seats booked successfully!');
+        return redirect()->back()->with('success', 'Rezerwacja zakończona sukcesem!');
     }
 }

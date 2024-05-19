@@ -8,14 +8,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .seat {
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             margin: 5px;
             background-color: #1b8010;
             border-radius: 5px;
             display: inline-block;
             text-align: center;
-            line-height: 30px;
+            line-height: 40px;
             color: white;
             cursor: pointer;
         }
@@ -24,39 +24,68 @@
             background-color: #d9534f;
         }
 
+        .seat.vip {
+            background-color: #ffbf00;
+        }
+
         .screen {
             background-color: #333;
             color: white;
             text-align: center;
-            padding: 5px;
-            width: 80%;
-            margin-left: 140px;
-            margin-bottom: 300px;
+            padding: 10px;
+            width: 100%;
+            margin: 20px 0;
         }
 
         .row {
             display: flex;
             justify-content: center;
+            align-items: center;
             margin-bottom: 10px;
+        }
+
+        .row-number {
+            margin-right: 10px;
+            display: inline-block;
+            width: 30px;
+            text-align: center;
+            line-height: 40px;
+        }
+
+        .seats-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Kup bilet na {{ $seance->film->name }}</h1>
-        <h3>Sala nr {{ $seance->screeningRoom->id }}</h3>
+        <h1 class="text-center">Kup bilet na {{ $seance->film->name }}</h1>
+        <h3 class="text-center">Sala nr {{ $seance->screeningRoom->id }}</h3>
         <div class="screen">Ekran</div>
-        @foreach ($seatsGroupedByRow as $row => $seats)
-            <div class="row">
-                @foreach ($seats as $seat)
-                    <div class="seat" data-seat-id="{{ $seat->id }}">
-                        {{ $seat->SEAT_IN_ROW }}
-                    </div>
-                @endforeach
-            </div>
-        @endforeach
-        <button id="buy-ticket" class="btn btn-primary mt-3">Zarezerwuj</button>
+        <div class="seats-container">
+            @foreach ($seatsGroupedByRow as $row => $seats)
+                <div class="row">
+                    <div class="row-number">{{ $row }}</div>
+                    @foreach ($seats as $seat)
+                        <div class="seat @if ($seat->VIP == 'T') vip @endif"
+                            data-seat-id="{{ $seat->id }}">
+                            {{ $seat->SEAT_IN_ROW }}
+                        </div>
+                    @endforeach
+                </div>
+            @endforeach
+        </div>
+        <div class="text-center">
+            <button id="buy-ticket" class="btn btn-primary mt-3">Zarezerwuj</button>
+        </div>
     </div>
 
     <script>
