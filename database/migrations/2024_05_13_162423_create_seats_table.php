@@ -1,0 +1,31 @@
+<?php
+
+use App\Models\ScreeningRoom;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('seats', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(ScreeningRoom::class)->constrained()->onDelete('cascade');
+            $table->integer('ROW');
+            $table->integer('SEAT_IN_ROW');
+            $table->char('VIP', 1);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('seats');
+    }
+};
