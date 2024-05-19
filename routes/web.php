@@ -13,9 +13,7 @@ use App\Http\Controllers\TicketController;
 //     return view('index');
 // });
 
-Route::controller(FilmController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
-});
+Route::get('/', [FilmController::class, 'index'])->name('index');
 
 // Route::get('/repertuar', function () {
 //     return view('repertuar');

@@ -25,6 +25,24 @@ class SeanceSeeder extends Seeder
                 'end_time' => Carbon::create(2024, 5, 19, 17, 1, 0)
             ],
             [
+                'film_id' => 12,
+                'screening_room_id' => 2,
+                'worker_id' => 2,
+                'technology_id' => 2,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 5, 19, 20, 0, 0),
+                'end_time' => Carbon::create(2024, 5, 19, 21, 46, 0)
+            ],
+            [
+                'film_id' => 23,
+                'screening_room_id' => 1,
+                'worker_id' => 1,
+                'technology_id' => 1,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 5, 19, 18, 0, 0),
+                'end_time' => Carbon::create(2024, 5, 19, 19, 58, 0)
+            ],
+            [
                 'film_id' => 2,
                 'screening_room_id' => 2,
                 'worker_id' => 2,
@@ -115,15 +133,6 @@ class SeanceSeeder extends Seeder
                 'end_time' => Carbon::create(2024, 5, 29, 19, 46, 0)
             ],
             [
-                'film_id' => 12,
-                'screening_room_id' => 2,
-                'worker_id' => 2,
-                'technology_id' => 2,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 5, 19, 20, 0, 0),
-                'end_time' => Carbon::create(2024, 5, 19, 21, 46, 0)
-            ],
-            [
                 'film_id' => 13,
                 'screening_room_id' => 1,
                 'worker_id' => 1,
@@ -212,15 +221,6 @@ class SeanceSeeder extends Seeder
                 'promotion_id' => 1,
                 'start_time' => Carbon::create(2024, 5, 29, 16, 0, 0),
                 'end_time' => Carbon::create(2024, 5, 29, 17, 53, 0)
-            ],
-            [
-                'film_id' => 23,
-                'screening_room_id' => 1,
-                'worker_id' => 1,
-                'technology_id' => 1,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 5, 19, 18, 0, 0),
-                'end_time' => Carbon::create(2024, 5, 19, 19, 58, 0)
             ],
             [
                 'film_id' => 24,

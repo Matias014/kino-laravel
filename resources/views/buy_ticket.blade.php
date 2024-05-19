@@ -45,7 +45,7 @@
         <h1>Kup bilet na {{ $seance->film->name }}</h1>
         <h3>Sala nr {{ $seance->screeningRoom->id }}</h3>
         <div class="screen">Ekran</div>
-        @foreach ($seance->screeningRoom->seats->groupBy('ROW') as $row => $seats)
+        @foreach ($seatsGroupedByRow as $row => $seats)
             <div class="row">
                 @foreach ($seats as $seat)
                     <div class="seat" data-seat-id="{{ $seat->id }}">

@@ -276,7 +276,7 @@
                                                     <strong>Technologia wyświetlania:</strong> ${seance.technology.name}<br>
                                                     <strong>Promocja:</strong> ${seance.promotion.discount}%<br>
                                                 </p>
-                                                <button type="button" class="btn btn-primary">Kup bilet</button>
+                                                <a href="{{ route('buy_ticket', ['id' => $seance->id]) }}" class="btn btn-primary">Kup bilet</a>
                                             </div>
                                         </div>
                                     `;

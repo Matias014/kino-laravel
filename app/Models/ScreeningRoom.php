@@ -10,7 +10,7 @@ class ScreeningRoom extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['SEAT', 'ROW'];
+    protected $fillable = ['SEATS', 'ROWS'];
 
     public $timestamps = false;
 

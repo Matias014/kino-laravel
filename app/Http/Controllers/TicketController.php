@@ -11,8 +11,10 @@ class TicketController extends Controller
 {
     public function show($id)
     {
-        $seance = Seance::with(['film', 'screeningRoom.seats'])->findOrFail($id);
-        return view('buy_ticket', compact('seance'));
+        // $seance = Seance::with(['film', 'screeningRoom.seats'])->findOrFail($id);
+        $seats = Seat::where('SCREENING_ROOM_ID', $id);
+        $seatsGroupedByRow = $seats->sortBy('SEAT_IN_ROW')->groupBy('ROW');
+        return view('buy_ticket', compact('seance', 'seatsGroupedByRow'));
     }
 
     public function bookSeats(Request $request)
