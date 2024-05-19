@@ -28,8 +28,10 @@
             background-color: #333;
             color: white;
             text-align: center;
-            padding: 10px;
-            margin-bottom: 10px;
+            padding: 5px;
+            width: 80%;
+            margin-left: 140px;
+            margin-bottom: 300px;
         }
 
         .row {

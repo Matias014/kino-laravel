@@ -11,14 +11,25 @@ class TicketController extends Controller
 {
     public function show($id)
     {
-        // $seance = Seance::with(['film', 'screeningRoom.seats'])->findOrFail($id);
-        $seats = Seat::where('SCREENING_ROOM_ID', $id);
-        $seatsGroupedByRow = $seats->sortBy('SEAT_IN_ROW')->groupBy('ROW');
+        // Zakładam, że zmienna $seance jest również potrzebna w widoku, więc odkomentowuję linię i poprawiam zmienną.
+        $seance = Seance::with(['film', 'screeningRoom.seats'])->findOrFail($id);
+
+        // Pobierz miejsca, uporządkuj je według kolumny SEAT_IN_ROW i pogrupuj według kolumny ROW.
+        $seats = Seat::where('SCREENING_ROOM_ID', $id)->orderBy('SEAT_IN_ROW')->get();
+        $seatsGroupedByRow = $seats->groupBy('ROW');
+
         return view('buy_ticket', compact('seance', 'seatsGroupedByRow'));
     }
 
     public function bookSeats(Request $request)
     {
+        $request->validate([
+            'seance_id' => 'required|exists:seances,id',
+            'seats' => 'required|array',
+            'seats.*.row' => 'required|integer',
+            'seats.*.seat' => 'required|integer',
+        ]);
+
         $seanceId = $request->input('seance_id');
         $seats = $request->input('seats');
 
@@ -30,6 +41,6 @@ class TicketController extends Controller
             ]);
         }
 
-        return response()->json(['success' => true]);
+        return redirect()->back()->with('success', 'Seats booked successfully!');
     }
 }
