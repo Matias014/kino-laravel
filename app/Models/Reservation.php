@@ -11,7 +11,7 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['reservation_id', 'seat_id'];
+    protected $fillable = ['seance_id', 'user_id'];
 
     public $timestamps = false;
 
@@ -31,7 +31,7 @@ class Reservation extends Model
         return $this->belongsTo(Seance::class);
     }
 
-    public function client(): BelongsTo {
-        return $this->belongsTo(Client::class);
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class);
     }
 }

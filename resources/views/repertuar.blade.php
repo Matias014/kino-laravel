@@ -100,14 +100,7 @@
         <h1>Repertuar</h1>
     </header>
 
-    <nav>
-        <div class="links">
-            <a href="{{ route('index') }}">Strona główna</a>
-            <a href="{{ route('repertuar') }}">Repertuar</a>
-            <a href="#Kontakt">Kontakt</a>
-            <a href="#logowanie">Zaloguj się</a>
-        </div>
-    </nav>
+    @include('shared.navbar2')
 
     <div>
         <div class="navbar">
@@ -169,7 +162,7 @@
                                     <strong>Technologia wyświetlania:</strong> {{ $seance->technology->name }}<br>
                                     <strong>Promocja:</strong> {{ $seance->promotion->discount }}%<br>
                                 </p>
-                                <a href="{{ route('buy_ticket', ['id' => $seance->id]) }}" class="btn btn-primary">Kup bilet</a>
+                                <a href="/seances/{{ $seance->id }}/buy" class="btn btn-primary">Kup bilet</a>
                             </div>
                         </div>
                     </div>
@@ -226,7 +219,7 @@
                                                     <strong>Technologia wyświetlania:</strong> ${seance.technology.name}<br>
                                                     <strong>Promocja:</strong> ${seance.promotion.discount}%<br>
                                                 </p>
-                                                <a href="{{ route('buy_ticket', ['id' => $seance->id]) }}" class="btn btn-primary">Kup bilet</a>
+                                                <a href="/seances/${seance.id}/buy" class="btn btn-primary">Kup bilet</a>
                                             </div>
                                         </div>
                                     `;

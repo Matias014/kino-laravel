@@ -10,11 +10,11 @@ class Client extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['NAME', 'SURNAME', 'EMAIL', 'PHONE_NUMBER', 'PASSWORD'];
+    // protected $fillable = ['NAME', 'SURNAME', 'EMAIL', 'PHONE_NUMBER', 'PASSWORD'];
 
-    public $timestamps = false;
+    // public $timestamps = false;
 
-    public function reservations(): HasMany {
-        return $this->hasMany(Reservation::class);
-    }
+    // public function reservations(): HasMany {
+    //     return $this->hasMany(Reservation::class);
+    // }
 }

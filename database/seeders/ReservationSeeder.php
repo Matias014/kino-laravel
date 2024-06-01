@@ -16,23 +16,23 @@ class ReservationSeeder extends Seeder
         Reservation::insert([
             [
                 'seance_id' => 1,
-                'client_id' => 1,
+                'user_id' => 1,
             ],
             [
                 'seance_id' => 1,
-                'client_id' => 2,
+                'user_id' => 2,
             ],
             [
                 'seance_id' => 2,
-                'client_id' => 3,
+                'user_id' => 3,
             ],
             [
                 'seance_id' => 2,
-                'client_id' => 4,
+                'user_id' => 4,
             ],
             [
                 'seance_id' => 1,
-                'client_id' => 5,
+                'user_id' => 5,
             ]
         ]);
     }

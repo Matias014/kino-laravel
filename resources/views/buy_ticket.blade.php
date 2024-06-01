@@ -28,6 +28,11 @@
             background-color: #ffbf00;
         }
 
+        .seat.reserved {
+            background-color: #333;
+            cursor: not-allowed;
+        }
+
         .screen {
             background-color: #333;
             color: white;
@@ -75,7 +80,7 @@
                 <div class="row">
                     <div class="row-number">{{ $row }}</div>
                     @foreach ($seats as $seat)
-                        <div class="seat @if ($seat->VIP == 'T') vip @endif"
+                        <div class="seat @if ($seat->VIP == 'T') vip @endif @if (in_array($seat->id, $reservedSeats)) reserved @endif"
                             data-seat-id="{{ $seat->id }}">
                             {{ $seat->SEAT_IN_ROW }}
                         </div>
@@ -84,44 +89,34 @@
             @endforeach
         </div>
         <div class="text-center">
-            <button id="buy-ticket" class="btn btn-primary mt-3">Zarezerwuj</button>
+            <form id="reservation-form" method="POST" action="{{ route('purchase') }}">
+                @csrf
+                <input type="hidden" name="seance_id" value="{{ $seance->id }}">
+                <input type="hidden" name="seats" id="selected-seats">
+                <button type="submit" class="btn btn-primary mt-3">Zarezerwuj</button>
+            </form>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const seats = document.querySelectorAll('.seat');
+            const seats = document.querySelectorAll('.seat:not(.reserved)');
             seats.forEach(seat => {
                 seat.addEventListener('click', function() {
                     this.classList.toggle('selected');
                 });
             });
 
-            document.getElementById('buy-ticket').addEventListener('click', function() {
+            document.getElementById('reservation-form').addEventListener('submit', function(event) {
+                event.preventDefault();
                 const selectedSeats = [];
                 document.querySelectorAll('.seat.selected').forEach(seat => {
                     selectedSeats.push({
-                        seat_id: seat.getAttribute('data-seat-id')
+                        id: seat.getAttribute('data-seat-id')
                     });
                 });
-                fetch('{{ route('book_seats') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            seance_id: {{ $seance->id }},
-                            seats: selectedSeats
-                        })
-                    }).then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Rezerwacja zakończona sukcesem!');
-                        } else {
-                            alert('Rezerwacja nie powiodła się.');
-                        }
-                    });
+                document.getElementById('selected-seats').value = JSON.stringify(selectedSeats);
+                this.submit();
             });
         });
     </script>

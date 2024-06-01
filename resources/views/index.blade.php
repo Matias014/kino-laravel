@@ -62,14 +62,7 @@
         <h1>Witaj w Kinie M&M</h1>
     </header>
 
-    <nav>
-        <div class="links">
-            <a href="{{ route('index') }}">Strona główna</a>
-            <a href="{{ route('repertuar') }}">Repertuar</a>
-            <a href="#Kontakt">Kontakt</a>
-            <a href="#logowanie">Zaloguj się</a>
-        </div>
-    </nav>
+    @include('shared.navbar2')
 
     <section id="Strona główna">
         <h2 class="font-weight-bold">Aktualne hity</h2>
