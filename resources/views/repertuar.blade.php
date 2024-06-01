@@ -8,57 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-        html,
-        body {
-            position: relative;
-            height: 100%;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #eee;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: 14px;
-            color: #000;
-            margin: 0;
-            padding: 0;
-        }
-
-        header,
-        footer {
-            background-color: #201919;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-        }
-
-        nav {
-            background-color: #04300c;
-            padding: 10px 0;
-        }
-
-        .links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .links a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .links a:hover {
-            background-color: #29a01a;
-            color: white;
-        }
-
         section {
             flex: 1;
             padding: 20px;
@@ -143,6 +92,7 @@
             color: #d9534f;
         }
     </style>
+    @include('shared.navbar')
 </head>
 
 <body>
@@ -186,7 +136,7 @@
                     $currentDate = $startDate->copy()->addDays($i);
                     $dayOfWeek = $daysOfWeek[$currentDate->dayOfWeek];
                     $day = $currentDate->format('d');
-                    $month = $months[strtoupper($currentDate->format('M'))];
+                    $month = $months[strtoupper($currentDate->format('F'))];
                     $year = $currentDate->format('Y');
                     $date = $currentDate->format('Y-m-d');
                 @endphp
@@ -202,30 +152,34 @@
     <section>
         <div class="container">
             <div class="row" id="seance-cards">
-                @foreach ($seances as $seance)
-                    <div class="col-md-4 d-flex seance-card"
-                        data-date="{{ \Carbon\Carbon::parse($seance->start_time)->format('Y-m-d') }}">
-                        <div class="card mb-4">
-                            <img src="{{ asset('storage/img/' . $seance->film->img) }}" class="card-img-top"
-                                alt="{{ $seance->film->name }}">
-                            <div class="card-body d-flex flex-column justify-content-around">
-                                <h5 class="card-title">{{ $seance->film->name }}</h5>
-                                <p class="card-text">{{ $seance->film->description }}</p>
-                                <p class="card-text">
-                                    <strong>Rozpoczęcie seansu:</strong>
-                                    {{ \Carbon\Carbon::parse($seance->start_time)->format('d M Y, H:i') }}<br>
-                                    <strong>Czas trwania:</strong> {{ $seance->film->duration }} minut<br>
-                                    <strong>Gatunek:</strong> {{ $seance->film->genre }}<br>
-                                    <strong>Technologia wyświetlania:</strong> {{ $seance->technology->name }}<br>
-                                    <strong>Promocja:</strong> {{ $seance->promotion->discount }}%<br>
-                                </p>
-                                <a href="{{ route('buy_ticket', ['id' => $seance->id]) }}" class="btn btn-primary">Kup bilet</a>
+                @if ($seances->isEmpty())
+                    <div class="no-seances">Brak seansów na dzisiaj</div>
+                @else
+                    @foreach ($seances as $seance)
+                        <div class="col-md-4 d-flex seance-card"
+                            data-date="{{ \Carbon\Carbon::parse($seance->start_time)->format('Y-m-d') }}">
+                            <div class="card mb-4">
+                                <img src="{{ asset('storage/img/' . $seance->film->img) }}" class="card-img-top"
+                                    alt="{{ $seance->film->name }}">
+                                <div class="card-body d-flex flex-column justify-content-around">
+                                    <h5 class="card-title">{{ $seance->film->name }}</h5>
+                                    <p class="card-text">{{ $seance->film->description }}</p>
+                                    <p class="card-text">
+                                        <strong>Rozpoczęcie seansu:</strong>
+                                        {{ \Carbon\Carbon::parse($seance->start_time)->format('d M Y, H:i') }}<br>
+                                        <strong>Czas trwania:</strong> {{ $seance->film->duration }} minut<br>
+                                        <strong>Gatunek:</strong> {{ $seance->film->genre }}<br>
+                                        <strong>Technologia wyświetlania:</strong> {{ $seance->technology->name }}<br>
+                                        <strong>Promocja:</strong> {{ $seance->promotion->discount }}%<br>
+                                    </p>
+                                    <a href="{{ route('buy_ticket', ['id' => $seance->id]) }}"
+                                        class="btn btn-primary">Kup bilet</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                @endif
             </div>
-            <div class="no-seances">Brak seansów na wybrany dzień</div>
         </div>
     </section>
 
@@ -276,7 +230,7 @@
                                                     <strong>Technologia wyświetlania:</strong> ${seance.technology.name}<br>
                                                     <strong>Promocja:</strong> ${seance.promotion.discount}%<br>
                                                 </p>
-                                                <a href="{{ route('buy_ticket', ['id' => $seance->id]) }}" class="btn btn-primary">Kup bilet</a>
+                                                <a href="/buy_ticket/${seance.id}" class="btn btn-primary">Kup bilet</a>
                                             </div>
                                         </div>
                                     `;
