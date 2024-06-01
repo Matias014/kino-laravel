@@ -6,7 +6,10 @@ use App\Models\Reservation;
 use App\Models\ReservationSeat;
 use App\Models\Seance;
 use App\Models\Seat;
+use App\Models\Product;
+use App\Models\ReservationProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
@@ -51,11 +54,13 @@ class TicketController extends Controller
         }
 
         $seance = Seance::with(['film', 'screeningRoom'])->findOrFail($seanceId);
+        $products = Product::all(); // Pobieranie wszystkich produktów
 
         return view('purchase', [
             'seance' => $seance,
             'seats' => $seatDetails,
             'totalPrice' => $totalPrice,
+            'products' => $products, // Przekazywanie produktów do widoku
         ]);
     }
 
@@ -72,27 +77,37 @@ class TicketController extends Controller
             $seat['seat_in_row'] = $seatModel->SEAT_IN_ROW;
         }
 
+        $products = Product::all(); // Pobieranie wszystkich produktów
+        $selectedProducts = $request->input('products', []);
+        foreach ($products as $product) {
+            if (in_array($product->id, $selectedProducts)) {
+                $totalPrice += $product->PRICE;
+            }
+        }
+
         return view('purchase', [
             'seance' => $seance,
             'seats' => $seats,
             'totalPrice' => $totalPrice,
+            'products' => $products,
         ]);
     }
-
 
     public function confirmPurchase(Request $request)
     {
         $request->validate([
             'seance_id' => 'required|exists:seances,id',
             'seats' => 'required|json',
+            'products' => 'array',
         ]);
 
         $seanceId = $request->input('seance_id');
         $seats = json_decode($request->input('seats'), true);
+        $selectedProducts = $request->input('products', []);
 
         $reservation = Reservation::create([
             'seance_id' => $seanceId,
-            'user_id' => 1, // Ustawienie statyczne ID klienta
+            'user_id' => Auth::user()->id, // Assuming client is logged in
         ]);
 
         foreach ($seats as $seat) {
@@ -102,6 +117,13 @@ class TicketController extends Controller
             ]);
         }
 
-        return redirect()->route('buy_ticket', ['id' => $seanceId])->with('success', 'Rezerwacja zakończona sukcesem!');
+        foreach ($selectedProducts as $productId) {
+            ReservationProduct::create([
+                'reservation_id' => $reservation->id,
+                'product_id' => $productId,
+            ]);
+        }
+
+        return redirect()->route('repertuar')->with('success', 'Rezerwacja zakończona sukcesem!');
     }
 }

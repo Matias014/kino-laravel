@@ -58,6 +58,22 @@
             @csrf
             <input type="hidden" name="seance_id" value="{{ $seance->id }}">
             <input type="hidden" name="seats" value="{{ json_encode($seats) }}">
+            <div class="form-group">
+                <h3>Wybierz poczęstunki:</h3>
+                @if ($products->isEmpty())
+                    <p>Brak dostępnych produktów.</p>
+                @else
+                    @foreach ($products as $product)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="products[]"
+                                value="{{ $product->id }}" id="product-{{ $product->id }}">
+                            <label class="form-check-label" for="product-{{ $product->id }}">
+                                {{ $product->name }} - {{ number_format($product->price, 2) }} PLN
+                            </label>
+                        </div>
+                    @endforeach
+                @endif
+            </div>
             <button type="submit" class="btn btn-primary">Potwierdź Rezerwację</button>
         </form>
     </div>

@@ -13,27 +13,27 @@ class ReservationSeatSeeder extends Seeder
      */
     public function run(): void
     {
-        ReservationSeat::insert([
-            [
-                'reservation_id' => 1,
-                'seat_id' => 1,
-            ],
-            [
-                'reservation_id' => 1,
-                'seat_id' => 2,
-            ],
-            [
-                'reservation_id' => 2,
-                'seat_id' => 3,
-            ],
-            [
-                'reservation_id' => 2,
-                'seat_id' => 4,
-            ],
-            [
-                'reservation_id' => 3,
-                'seat_id' => 5,
-            ]
-        ]);
+        // ReservationSeat::insert([
+        //     [
+        //         'reservation_id' => 1,
+        //         'seat_id' => 1,
+        //     ],
+        //     [
+        //         'reservation_id' => 1,
+        //         'seat_id' => 2,
+        //     ],
+        //     [
+        //         'reservation_id' => 2,
+        //         'seat_id' => 3,
+        //     ],
+        //     [
+        //         'reservation_id' => 2,
+        //         'seat_id' => 4,
+        //     ],
+        //     [
+        //         'reservation_id' => 3,
+        //         'seat_id' => 5,
+        //     ]
+        // ]);
     }
 }

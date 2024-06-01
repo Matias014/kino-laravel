@@ -16,22 +16,25 @@ class UserSeeder extends Seeder
             [
                 'NAME' => 'John',
                 'SURNAME' => 'Doe',
-                'EMAIL' => 'john.doe@example.com',
+                'EMAIL' => 'doe@example.com',
                 'PHONE_NUMBER' => '123456789',
-                'PASSWORD' => bcrypt('password123')
+                'ROLE' => 'admin',
+                'PASSWORD' => bcrypt('123')
             ],
             [
                 'NAME' => 'Jane',
                 'SURNAME' => 'Smith',
-                'EMAIL' => 'jane.smith@example.com',
+                'EMAIL' => 'jane@example.com',
                 'PHONE_NUMBER' => '987654321',
-                'PASSWORD' => bcrypt('password123')
+                'ROLE' => 'user',
+                'PASSWORD' => bcrypt('123')
             ],
             [
                 'NAME' => 'Alice',
                 'SURNAME' => 'Johnson',
                 'EMAIL' => 'alice.johnson@example.com',
                 'PHONE_NUMBER' => '456123789',
+                'ROLE' => 'user',
                 'PASSWORD' => bcrypt('password123')
             ],
             [
@@ -39,6 +42,7 @@ class UserSeeder extends Seeder
                 'SURNAME' => 'Brown',
                 'EMAIL' => 'bob.brown@example.com',
                 'PHONE_NUMBER' => '789456123',
+                'ROLE' => 'user',
                 'PASSWORD' => bcrypt('password123')
             ],
             [
@@ -46,6 +50,7 @@ class UserSeeder extends Seeder
                 'SURNAME' => 'Davis',
                 'EMAIL' => 'charlie.davis@example.com',
                 'PHONE_NUMBER' => '321654987',
+                'ROLE' => 'user',
                 'PASSWORD' => bcrypt('password123')
             ],
         ]);

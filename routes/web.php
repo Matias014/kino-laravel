@@ -28,4 +28,8 @@ Route::post('/purchase', [TicketController::class, 'purchase'])->name('purchase'
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/reservations', [UserController::class, 'showReservations'])->name('user.reservations');
+    Route::post('/user/reservations/{id}/cancel', [UserController::class, 'cancelReservation'])->name('user.reservations.cancel');
+    Route::get('/user/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::post('/user/edit', [UserController::class, 'update'])->name('user.update');
+    Route::post('/user/delete', [UserController::class, 'destroy'])->name('user.delete');
 });

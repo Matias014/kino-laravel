@@ -14,26 +14,26 @@ class ReservationProductSeeder extends Seeder
     public function run(): void
     {
         ReservationProduct::insert([
-            [
-                'PRODUCT_ID' => 1,
-                'RESERVATION_ID' => 1,
-            ],
-            [
-                'PRODUCT_ID' => 2,
-                'RESERVATION_ID' => 1,
-            ],
-            [
-                'PRODUCT_ID' => 3,
-                'RESERVATION_ID' => 2,
-            ],
-            [
-                'PRODUCT_ID' => 4,
-                'RESERVATION_ID' => 2,
-            ],
-            [
-                'PRODUCT_ID' => 5,
-                'RESERVATION_ID' => 3,
-            ]
+            // [
+            //     'PRODUCT_ID' => 1,
+            //     'RESERVATION_ID' => 1,
+            // ],
+            // [
+            //     'PRODUCT_ID' => 2,
+            //     'RESERVATION_ID' => 1,
+            // ],
+            // [
+            //     'PRODUCT_ID' => 3,
+            //     'RESERVATION_ID' => 2,
+            // ],
+            // [
+            //     'PRODUCT_ID' => 4,
+            //     'RESERVATION_ID' => 2,
+            // ],
+            // [
+            //     'PRODUCT_ID' => 5,
+            //     'RESERVATION_ID' => 3,
+            // ]
         ]);
     }
 }

@@ -75,7 +75,7 @@
         <h1 class="text-center">Kup bilet na {{ $seance->film->name }}</h1>
         <h3 class="text-center">Sala nr {{ $seance->screeningRoom->id }}</h3>
         <div class="screen">Ekran</div>
-        <div class="seats-container">
+        <div class="seats-container" style="margin-top: 250px;">
             @foreach ($seatsGroupedByRow as $row => $seats)
                 <div class="row">
                     <div class="row-number">{{ $row }}</div>

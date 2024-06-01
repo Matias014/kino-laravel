@@ -35,9 +35,9 @@
                 <p><strong>Data i godzina:</strong>
                     {{ \Carbon\Carbon::parse($reservation->seance->start_time)->format('d M Y, H:i') }}</p>
                 <p><strong>Miejsca:</strong>
-                    @if ($reservation->reservationSeats)
+                    @if ($reservation->reservationSeats->isNotEmpty())
                         @foreach ($reservation->reservationSeats as $reservationSeat)
-                            {{ $reservationSeat->seat->row }}-{{ $reservationSeat->seat->seat_in_row }}@if (!$loop->last)
+                            rząd {{ $reservationSeat->seat->row }}- miejsce {{ $reservationSeat->seat->seat_in_row }}@if (!$loop->last)
                                 ,
                             @endif
                         @endforeach
@@ -45,8 +45,20 @@
                         Brak danych o miejscach
                     @endif
                 </p>
+                <form method="POST" action="{{ route('user.reservations.cancel', $reservation->id) }}">
+                    @csrf
+                    <button type="submit" class="btn btn-danger">Anuluj bilet</button>
+                </form>
             </div>
         @endforeach
+        <div class="text-center mt-5">
+            <a href="{{ route('user.edit') }}" class="btn btn-warning">Edytuj dane</a>
+            <form method="POST" action="{{ route('user.delete') }}" style="display:inline;">
+                @csrf
+                <button type="submit" class="btn btn-danger"
+                    onclick="return confirm('Czy na pewno chcesz usunąć konto?')">Usuń konto</button>
+            </form>
+        </div>
     </div>
     @include('shared.footer')
 </body>

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('SURNAME', 30);
             $table->string('EMAIL', 40)->unique();
             $table->string('PHONE_NUMBER', 15);
+            $table->string('ROLE', 5);
             $table->string('PASSWORD', 100);
             // $table->string('name');
             // $table->string('surname');

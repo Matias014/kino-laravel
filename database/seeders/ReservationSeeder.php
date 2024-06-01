@@ -13,27 +13,8 @@ class ReservationSeeder extends Seeder
      */
     public function run(): void
     {
-        Reservation::insert([
-            [
-                'seance_id' => 1,
-                'user_id' => 1,
-            ],
-            [
-                'seance_id' => 1,
-                'user_id' => 2,
-            ],
-            [
-                'seance_id' => 2,
-                'user_id' => 3,
-            ],
-            [
-                'seance_id' => 2,
-                'user_id' => 4,
-            ],
-            [
-                'seance_id' => 1,
-                'user_id' => 5,
-            ]
-        ]);
+        // Reservation::insert([
+
+        // ]);
     }
 }
