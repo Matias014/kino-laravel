@@ -82,7 +82,7 @@
                     @foreach ($seats as $seat)
                         <div class="seat @if ($seat->VIP == 'T') vip @endif @if (in_array($seat->id, $reservedSeats)) reserved @endif"
                             data-seat-id="{{ $seat->id }}">
-                            {{ $seat->SEAT_IN_ROW }}
+                            {{ $seat->seat_in_row }}
                         </div>
                     @endforeach
                 </div>

@@ -30,14 +30,14 @@
         <h1 class="text-center">Moje bilety</h1>
         @foreach ($reservations as $reservation)
             <div class="reservation-card">
-                <h3>{{ $reservation->seance->film->name }}</h3>
+                <h3>Film: {{ $reservation->seance->film->name }}</h3>
                 <p><strong>Sala:</strong> {{ $reservation->seance->screeningRoom->id }}</p>
-                <p><strong>Data i godzina:</strong>
+                <p><strong>Data i godzina rozpoczęcia seansu:</strong>
                     {{ \Carbon\Carbon::parse($reservation->seance->start_time)->format('d M Y, H:i') }}</p>
                 <p><strong>Miejsca:</strong>
                     @if ($reservation->reservationSeats->isNotEmpty())
                         @foreach ($reservation->reservationSeats as $reservationSeat)
-                            rząd {{ $reservationSeat->seat->row }}- miejsce {{ $reservationSeat->seat->seat_in_row }}@if (!$loop->last)
+                            rząd {{ $reservationSeat->seat->row }} - miejsce {{ $reservationSeat->seat->seat_in_row }}@if (!$loop->last)
                                 ,
                             @endif
                         @endforeach
