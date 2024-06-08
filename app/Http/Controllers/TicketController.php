@@ -31,41 +31,6 @@ class TicketController extends Controller
         return view('buy_ticket', compact('seance', 'seatsGroupedByRow', 'reservedSeats'));
     }
 
-    public function bookSeats(Request $request)
-    {
-        $request->validate([
-            'seance_id' => 'required|exists:seances,id',
-            'seats' => 'required|array',
-            'seats.*.seat_id' => 'required|exists:seats,id',
-        ]);
-
-        $seanceId = $request->input('seance_id');
-        $seats = $request->input('seats');
-        $totalPrice = 0;
-        $seatDetails = [];
-
-        foreach ($seats as $seat) {
-            $seatModel = Seat::findOrFail($seat['seat_id']);
-            $totalPrice += $seatModel->price; // Assuming you have a price column
-            $seatDetails[] = [
-                'id' => $seatModel->id,
-                'row' => $seatModel->row,
-                'seat_in_row' => $seatModel->seat_in_row,
-                'price' => $seatModel->price, // Dodanie ceny dla każdego miejsca
-            ];
-        }
-
-        $seance = Seance::with(['film', 'screeningRoom'])->findOrFail($seanceId);
-        $products = Product::all(); // Pobieranie wszystkich produktów
-
-        return view('purchase', [
-            'seance' => $seance,
-            'seats' => $seatDetails,
-            'totalPrice' => $totalPrice,
-            'products' => $products, // Przekazywanie produktów do widoku
-        ]);
-    }
-
     public function purchase(Request $request)
     {
         $seance = Seance::with(['film', 'screeningRoom'])->findOrFail($request->input('seance_id'));
@@ -74,7 +39,8 @@ class TicketController extends Controller
 
         foreach ($seats as &$seat) {
             $seatModel = Seat::findOrFail($seat['id']);
-            $totalPrice += $seatModel->price;
+            $seatPrice = $seatModel->vip == 'T' ? $seance->screeningRoom->price_for_seat * 2 : $seance->screeningRoom->price_for_seat; // miejsce vip to 100% drożej
+            $totalPrice += $seatPrice;
             $seat['row'] = $seatModel->row;
             $seat['seat_in_row'] = $seatModel->seat_in_row;
         }
@@ -102,11 +68,13 @@ class TicketController extends Controller
             'seance_id' => 'required|exists:seances,id',
             'seats' => 'required|json',
             'products' => 'array',
+            'total_price' => 'required|numeric|min:0',
         ]);
 
         $seanceId = $request->input('seance_id');
         $seats = json_decode($request->input('seats'), true);
         $selectedProducts = $request->input('products', []);
+        $totalPrice = floatval($request->input('total_price'));
 
         $reservation = Reservation::create([
             'seance_id' => $seanceId,
@@ -127,10 +95,51 @@ class TicketController extends Controller
             ]);
         }
 
+        // Ticket::create([
+        //     'reservation_id' => $reservation->id,
+        //     'price' => $totalPrice,
+        // ]);
+
         return redirect()->route('repertuar')->with('success', 'Rezerwacja zakończona sukcesem!');
     }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // public function bookSeats(Request $request)
+    // {
+    //     $request->validate([
+    //         'seance_id' => 'required|exists:seances,id',
+    //         'seats' => 'required|array',
+    //         'seats.*.seat_id' => 'required|exists:seats,id',
+    //     ]);
+
+    //     $seanceId = $request->input('seance_id');
+    //     $seats = $request->input('seats');
+    //     $totalPrice = 0;
+    //     $seatDetails = [];
+
+    //     foreach ($seats as $seat) {
+    //         $seatModel = Seat::findOrFail($seat['seat_id']);
+    //         $totalPrice += $seatModel->price; // Assuming you have a price column
+    //         $seatDetails[] = [
+    //             'id' => $seatModel->id,
+    //             'row' => $seatModel->row,
+    //             'seat_in_row' => $seatModel->seat_in_row,
+    //             'price' => $seatModel->price, // Dodanie ceny dla każdego miejsca
+    //         ];
+    //     }
+
+    //     $seance = Seance::with(['film', 'screeningRoom'])->findOrFail($seanceId);
+    //     $products = Product::all(); // Pobieranie wszystkich produktów
+
+    //     return view('purchase', [
+    //         'seance' => $seance,
+    //         'seats' => $seatDetails,
+    //         'totalPrice' => $totalPrice,
+    //         'products' => $products, // Przekazywanie produktów do widoku
+    //     ]);
+    // }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function index()
     {
@@ -154,7 +163,7 @@ class TicketController extends Controller
 
         DB::beginTransaction();
         try {
-            DB::statement('BEGIN ADD_TICKET(:reservation_id, :voucher_id, :price, :status_of_payment); END;', [
+            DB::statement('BEGIN ADD_TICKET(:reservation_id, :voucher_id, :price); END;', [
                 'reservation_id' => $request->input('reservation_id'),
                 'voucher_id' => $request->input('voucher_id'),
                 'price' => $request->input('price'),
@@ -185,7 +194,7 @@ class TicketController extends Controller
 
         DB::beginTransaction();
         try {
-            DB::statement('BEGIN UPDATE_TICKET(:id, :reservation_id, :voucher_id, :price, :status_of_payment); END;', [
+            DB::statement('BEGIN UPDATE_TICKET(:id, :reservation_id, :voucher_id, :price); END;', [
                 'id' => $id,
                 'reservation_id' => $request->input('reservation_id'),
                 'voucher_id' => $request->input('voucher_id'),

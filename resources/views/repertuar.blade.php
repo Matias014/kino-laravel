@@ -146,28 +146,34 @@
         <div class="container">
             <div class="row" id="seance-cards">
                 @foreach ($seances as $seance)
-                    <div class="col-md-4 d-flex seance-card"
-                        data-date="{{ \Carbon\Carbon::parse($seance->start_time)->format('Y-m-d') }}">
-                        <div class="card mb-4">
-                            <img src="{{ asset('storage/img/' . $seance->film->img) }}" class="card-img-top"
-                                alt="{{ $seance->film->name }}">
-                            <div class="card-body d-flex flex-column justify-content-around">
-                                <h5 class="card-title">{{ $seance->film->name }}</h5>
-                                <p class="card-text">{{ $seance->film->description }}</p>
-                                <p class="card-text">
-                                    <strong>Rozpoczęcie seansu:</strong>
-                                    {{ \Carbon\Carbon::parse($seance->start_time)->format('d M Y, H:i') }}<br>
-                                    <strong>Czas trwania:</strong> {{ $seance->film->duration }} minut<br>
-                                    <strong>Gatunek:</strong> {{ $seance->film->genre }}<br>
-                                    <strong>Technologia wyświetlania:</strong> {{ $seance->technology->name }}<br>
-                                    <strong>Promocja:</strong> {{ $seance->promotion->discount }}%<br>
-                                </p>
-                                @if (Auth::check())
-                                    <a href="/seances/{{ $seance->id }}/buy" class="btn btn-primary">Kup bilet</a>
-                                @endif
+                    @php
+                        $currentDateTime = \Carbon\Carbon::now();
+                        $seanceDateTime = \Carbon\Carbon::parse($seance->start_time);
+                    @endphp
+                    @if ($seanceDateTime > $currentDateTime)
+                        <div class="col-md-4 d-flex seance-card" data-date="{{ $seanceDateTime->format('Y-m-d') }}">
+                            <div class="card mb-4">
+                                <img src="{{ asset('storage/img/' . $seance->film->img) }}" class="card-img-top"
+                                    alt="{{ $seance->film->name }}">
+                                <div class="card-body d-flex flex-column justify-content-around">
+                                    <h5 class="card-title">{{ $seance->film->name }}</h5>
+                                    <p class="card-text">{{ $seance->film->description }}</p>
+                                    <p class="card-text">
+                                        <strong>Rozpoczęcie seansu:</strong>
+                                        {{ $seanceDateTime->format('d M Y, H:i') }}<br>
+                                        <strong>Czas trwania:</strong> {{ $seance->film->duration }} minut<br>
+                                        <strong>Gatunek:</strong> {{ $seance->film->genre }}<br>
+                                        <strong>Technologia wyświetlania:</strong> {{ $seance->technology->name }}<br>
+                                        <strong>Promocja:</strong> {{ $seance->promotion->discount }}%<br>
+                                    </p>
+                                    @if (Auth::check())
+                                        <a href="/seances/{{ $seance->id }}/buy" class="btn btn-primary">Kup
+                                            bilet</a>
+                                    @endif
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 @endforeach
             </div>
             <div class="no-seances">Brak seansów na wybrany dzień</div>
@@ -199,36 +205,41 @@
                         .then(data => {
                             seanceCardsContainer.innerHTML = '';
 
+                            const currentDateTime = new Date();
+
                             if (data.length === 0) {
                                 noSeancesMessage.innerHTML = `Brak seansów na ${selectedDate}`;
                                 noSeancesMessage.style.display = 'block';
                             } else {
                                 noSeancesMessage.style.display = 'none';
                                 data.forEach(seance => {
-                                    const card = document.createElement('div');
-                                    card.classList.add('col-md-4', 'd-flex',
-                                        'seance-card');
-                                    card.innerHTML = `
-                                        <div class="card mb-4">
-                                            <img src="storage/img/${seance.film.img}" class="card-img-top" alt="${seance.film.name}">
-                                            <div class="card-body d-flex flex-column justify-content-around">
-                                                <h5 class="card-title">${seance.film.name}</h5>
-                                                <p class="card-text">${seance.film.description}</p>
-                                                <p class="card-text">
-                                                    <strong>Rozpoczęcie seansu:</strong> ${new Date(seance.start_time).toLocaleString()}<br>
-                                                    <strong>Czas trwania:</strong> ${seance.film.duration} minut<br>
-                                                    <strong>Gatunek:</strong> ${seance.film.genre}<br>
-                                                    <strong>Technologia wyświetlania:</strong> ${seance.technology.name}<br>
-                                                    <strong>Promocja:</strong> ${seance.promotion.discount}%<br>
-                                                </p>
-                                                @if (Auth::check())
-                                                <a href="/seances/${seance.id}/buy" class="btn btn-primary">Kup bilet</a>
-                                                @endif
+                                    const seanceDateTime = new Date(seance.start_time);
 
+                                    if (seanceDateTime > currentDateTime) {
+                                        const card = document.createElement('div');
+                                        card.classList.add('col-md-4', 'd-flex',
+                                            'seance-card');
+                                        card.innerHTML = `
+                                            <div class="card mb-4">
+                                                <img src="storage/img/${seance.film.img}" class="card-img-top" alt="${seance.film.name}">
+                                                <div class="card-body d-flex flex-column justify-content-around">
+                                                    <h5 class="card-title">${seance.film.name}</h5>
+                                                    <p class="card-text">${seance.film.description}</p>
+                                                    <p class="card-text">
+                                                        <strong>Rozpoczęcie seansu:</strong> ${seanceDateTime.toLocaleString()}<br>
+                                                        <strong>Czas trwania:</strong> ${seance.film.duration} minut<br>
+                                                        <strong>Gatunek:</strong> ${seance.film.genre}<br>
+                                                        <strong>Technologia wyświetlania:</strong> ${seance.technology.name}<br>
+                                                        <strong>Promocja:</strong> ${seance.promotion.discount}%<br>
+                                                    </p>
+                                                    @if (Auth::check())
+                                                    <a href="/seances/${seance.id}/buy" class="btn btn-primary">Kup bilet</a>
+                                                    @endif
+                                                </div>
                                             </div>
-                                        </div>
-                                    `;
-                                    seanceCardsContainer.appendChild(card);
+                                        `;
+                                        seanceCardsContainer.appendChild(card);
+                                    }
                                 });
                             }
                         });

@@ -33,6 +33,10 @@
             background-color: #ffbf00;
         }
 
+        .seat.vip.selected {
+            background-color: red;
+        }
+
         .seat.reserved {
             background-color: #333;
             cursor: not-allowed;
@@ -123,6 +127,9 @@
             seats.forEach(seat => {
                 seat.addEventListener('click', function() {
                     this.classList.toggle('selected');
+                    if (this.classList.contains('vip')) {
+                        this.classList.toggle('vip-selected');
+                    }
                 });
             });
 

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\ProductController;
@@ -24,7 +23,7 @@ Route::get('/', [FilmController::class, 'index2'])->name('index');
 Route::get('/repertuar', [SeanceController::class, 'index'])->name('repertuar');
 Route::get('/seances/{id}/buy', [TicketController::class, 'show'])->name('buy_ticket');
 Route::get('/seances', [SeanceController::class, 'getSeances']);
-Route::post('/seances/book', [TicketController::class, 'bookSeats'])->name('book_seats');
+// Route::post('/seances/book', [TicketController::class, 'bookSeats'])->name('book_seats');
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/auth/login', 'login')->name('login');

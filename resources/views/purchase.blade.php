@@ -47,17 +47,18 @@
             <p><strong>Liczba miejsc:</strong> {{ count($seats) }}</p>
             <p><strong>Wybrane miejsca:</strong>
                 @foreach ($seats as $seat)
-                    {{ $seat['row'] }}-{{ $seat['seat_in_row'] }}@if (!$loop->last)
+                    rząd {{ $seat['row'] }} - miejsce {{ $seat['seat_in_row'] }}@if (!$loop->last)
                         ,
                     @endif
                 @endforeach
             </p>
-            <p><strong>Łączny koszt:</strong> {{ number_format($totalPrice, 2) }} PLN</p>
+            <p><strong>Łączny koszt:</strong> <span id="totalPrice">{{ number_format($totalPrice, 2) }}</span> PLN</p>
         </div>
         <form method="POST" action="{{ route('confirm_purchase') }}">
             @csrf
             <input type="hidden" name="seance_id" value="{{ $seance->id }}">
             <input type="hidden" name="seats" value="{{ json_encode($seats) }}">
+            <input type="hidden" id="totalPriceInput" name="total_price" value="{{ $totalPrice }}">
             <div class="form-group">
                 <h3>Wybierz poczęstunki:</h3>
                 @if ($products->isEmpty())
@@ -65,8 +66,9 @@
                 @else
                     @foreach ($products as $product)
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="products[]"
-                                value="{{ $product->id }}" id="product-{{ $product->id }}">
+                            <input class="form-check-input product-checkbox" type="checkbox" name="products[]"
+                                value="{{ $product->id }}" id="product-{{ $product->id }}"
+                                data-price="{{ $product->price }}">
                             <label class="form-check-label" for="product-{{ $product->id }}">
                                 {{ $product->name }} - {{ number_format($product->price, 2) }} PLN
                             </label>
@@ -77,6 +79,28 @@
             <button type="submit" class="btn btn-primary">Potwierdź Rezerwację</button>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.product-checkbox');
+            const totalPriceElement = document.getElementById('totalPrice');
+            const totalPriceInput = document.getElementById('totalPriceInput');
+            let totalPrice = parseFloat(totalPriceInput.value);
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const productPrice = parseFloat(this.dataset.price);
+                    if (this.checked) {
+                        totalPrice += productPrice;
+                    } else {
+                        totalPrice -= productPrice;
+                    }
+                    totalPriceElement.textContent = totalPrice.toFixed(2);
+                    totalPriceInput.value = totalPrice.toFixed(2);
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
