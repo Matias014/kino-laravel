@@ -21,8 +21,8 @@ class SeanceSeeder extends Seeder
                 'worker_id' => 1,
                 'technology_id' => 1,
                 'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 1, 14, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 1, 17, 1, 0)
+                'start_time' => Carbon::create(2024, 6, 3, 12, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 3, 12, 16, 0)
             ],
             [
                 'film_id' => 12,

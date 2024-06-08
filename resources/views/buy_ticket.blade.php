@@ -7,6 +7,11 @@
     <title>Kup bilet</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+
         .seat {
             width: 40px;
             height: 40px;
@@ -61,6 +66,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-top: 250px;
         }
 
         .container {
@@ -75,18 +81,31 @@
         <h1 class="text-center">Kup bilet na {{ $seance->film->name }}</h1>
         <h3 class="text-center">Sala nr {{ $seance->screeningRoom->id }}</h3>
         <div class="screen">Ekran</div>
-        <div class="seats-container" style="margin-top: 250px;">
-            @foreach ($seatsGroupedByRow as $row => $seats)
+        <div class="seats-container">
+            @php
+                $totalSeats = $seance->screeningRoom->seats;
+                $rows = $seance->screeningRoom->rows;
+                $seatsPerRow = ceil($totalSeats / $rows);
+            @endphp
+
+            @for ($currentRow = 1; $currentRow <= $rows; $currentRow++)
                 <div class="row">
-                    <div class="row-number">{{ $row }}</div>
-                    @foreach ($seats as $seat)
-                        <div class="seat @if ($seat->VIP == 'T') vip @endif @if (in_array($seat->id, $reservedSeats)) reserved @endif"
-                            data-seat-id="{{ $seat->id }}">
-                            {{ $seat->seat_in_row }}
-                        </div>
-                    @endforeach
+                    <div class="row-number">{{ $currentRow }}</div>
+                    @for ($i = 1; $i <= $seatsPerRow; $i++)
+                        @php
+                            $seat = $seatsGroupedByRow[$currentRow][$i - 1] ?? null;
+                        @endphp
+                        @if ($seat)
+                            <div class="seat @if ($seat->vip == 'T') vip @endif @if (in_array($seat->id, $reservedSeats)) reserved @endif"
+                                data-seat-id="{{ $seat->id }}">
+                                {{ $seat->seat_in_row }}
+                            </div>
+                        @else
+                            <div class="seat empty"></div>
+                        @endif
+                    @endfor
                 </div>
-            @endforeach
+            @endfor
         </div>
         <div class="text-center">
             <form id="reservation-form" method="POST" action="{{ route('purchase') }}">
@@ -111,9 +130,12 @@
                 event.preventDefault();
                 const selectedSeats = [];
                 document.querySelectorAll('.seat.selected').forEach(seat => {
-                    selectedSeats.push({
-                        id: seat.getAttribute('data-seat-id')
-                    });
+                    const seatId = seat.getAttribute('data-seat-id');
+                    if (seatId) {
+                        selectedSeats.push({
+                            id: seatId
+                        });
+                    }
                 });
                 document.getElementById('selected-seats').value = JSON.stringify(selectedSeats);
                 this.submit();

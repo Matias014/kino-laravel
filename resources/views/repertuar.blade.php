@@ -162,7 +162,9 @@
                                     <strong>Technologia wyświetlania:</strong> {{ $seance->technology->name }}<br>
                                     <strong>Promocja:</strong> {{ $seance->promotion->discount }}%<br>
                                 </p>
-                                <a href="/seances/{{ $seance->id }}/buy" class="btn btn-primary">Kup bilet</a>
+                                @if (Auth::check())
+                                    <a href="/seances/{{ $seance->id }}/buy" class="btn btn-primary">Kup bilet</a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -219,7 +221,10 @@
                                                     <strong>Technologia wyświetlania:</strong> ${seance.technology.name}<br>
                                                     <strong>Promocja:</strong> ${seance.promotion.discount}%<br>
                                                 </p>
+                                                @if (Auth::check())
                                                 <a href="/seances/${seance.id}/buy" class="btn btn-primary">Kup bilet</a>
+                                                @endif
+
                                             </div>
                                         </div>
                                     `;

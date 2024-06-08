@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Reservation;
 use App\Models\ReservationSeat;
+use App\Models\Ticket;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -35,7 +36,6 @@ class UserController extends Controller
 
         return redirect()->route('user.reservations')->with('error', 'Nie można anulować rezerwacji.');
     }
-
 
     public function edit()
     {

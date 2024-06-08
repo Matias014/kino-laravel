@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FilmController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SeanceController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
@@ -38,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
 // Ścieżki admina
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::resource('films', FilmController::class);
-    Route::get('/admin/products', [AdminController::class, 'products'])->name('admin.products');
+    Route::resource('products', ProductController::class);
     Route::get('/admin/promotions', [AdminController::class, 'promotions'])->name('admin.promotions');
     Route::get('/admin/reservations', [AdminController::class, 'reservations'])->name('admin.reservations');
     Route::get('/admin/reservation_products', [AdminController::class, 'reservationProducts'])->name('admin.reservation_products');

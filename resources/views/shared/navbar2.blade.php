@@ -10,7 +10,7 @@
                     <a href="javascript:void(0)" class="dropbtn">Admin</a>
                     <div class="dropdown-content">
                         <a href="{{ route('films.index') }}">Filmy</a>
-                        <a href="{{ route('admin.products') }}">Produkty</a>
+                        <a href="{{ route('products.index') }}">Produkty</a>
                         <a href="{{ route('admin.promotions') }}">Promocje</a>
                         <a href="{{ route('admin.reservations') }}">Rezerwacje</a>
                         <a href="{{ route('admin.reservation_products') }}">Rezerwacje produktów</a>
@@ -29,7 +29,7 @@
             <a href="{{ route('logout') }}">{{ Auth::user()->name }}, wyloguj się</a>
         @else
             <a class="nav-link" href="{{ route('login') }}">Zaloguj się</a>
-            <a class="nav-link" href="{{ route('register') }}">Zarejestruj się</a>
+            {{-- <a class="nav-link" href="{{ route('register') }}">Zarejestruj się</a> --}}
         @endif
     </div>
 </nav>

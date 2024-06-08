@@ -14,9 +14,9 @@ class UserSeeder extends Seeder
     {
         User::insert([
             [
-                'NAME' => 'John',
-                'SURNAME' => 'Doe',
-                'EMAIL' => 'doe@example.com',
+                'NAME' => 'admin',
+                'SURNAME' => 'admin',
+                'EMAIL' => 'admin@example.com',
                 'PHONE_NUMBER' => '123456789',
                 'ROLE' => 'admin',
                 'PASSWORD' => bcrypt('123')

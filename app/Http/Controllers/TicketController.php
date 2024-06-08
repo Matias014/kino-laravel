@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ReservationProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TicketController extends Controller
 {
@@ -47,8 +48,8 @@ class TicketController extends Controller
             $totalPrice += $seatModel->price; // Assuming you have a price column
             $seatDetails[] = [
                 'id' => $seatModel->id,
-                'row' => $seatModel->ROW,
-                'seat_in_row' => $seatModel->SEAT_IN_ROW,
+                'row' => $seatModel->row,
+                'seat_in_row' => $seatModel->seat_in_row,
                 'price' => $seatModel->price, // Dodanie ceny dla każdego miejsca
             ];
         }
@@ -70,18 +71,18 @@ class TicketController extends Controller
         $seats = json_decode($request->input('seats'), true);
         $totalPrice = 0;
 
-        foreach ($seats as &$seat) { // Użyj referencji, aby zaktualizować elementy bezpośrednio w tablicy
+        foreach ($seats as &$seat) {
             $seatModel = Seat::findOrFail($seat['id']);
             $totalPrice += $seatModel->price;
-            $seat['row'] = $seatModel->ROW;
-            $seat['seat_in_row'] = $seatModel->SEAT_IN_ROW;
+            $seat['row'] = $seatModel->row;
+            $seat['seat_in_row'] = $seatModel->seat_in_row;
         }
 
-        $products = Product::all(); // Pobieranie wszystkich produktów
+        $products = Product::all();
         $selectedProducts = $request->input('products', []);
         foreach ($products as $product) {
             if (in_array($product->id, $selectedProducts)) {
-                $totalPrice += $product->PRICE;
+                $totalPrice += $product->price;
             }
         }
 
@@ -92,6 +93,7 @@ class TicketController extends Controller
             'products' => $products,
         ]);
     }
+
 
     public function confirmPurchase(Request $request)
     {
@@ -107,7 +109,7 @@ class TicketController extends Controller
 
         $reservation = Reservation::create([
             'seance_id' => $seanceId,
-            'user_id' => Auth::user()->id, // Assuming client is logged in
+            'user_id' => Auth::user()->id,
         ]);
 
         foreach ($seats as $seat) {
