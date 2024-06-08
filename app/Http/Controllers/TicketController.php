@@ -12,7 +12,6 @@ use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class TicketController extends Controller
 {
@@ -22,8 +21,8 @@ class TicketController extends Controller
         $seance = Seance::with(['film', 'screeningRoom'])->findOrFail($id);
 
         // Pobierz miejsca dla konkretnej sali kinowej i uporządkuj według numeru rzędu i miejsca w rzędzie
-        $seats = Seat::where('screening_room_id', $seance->screeningRoom->id)->orderBy('ROW')->orderBy('SEAT_IN_ROW')->get();
-        $seatsGroupedByRow = $seats->groupBy('ROW');
+        $seats = Seat::where('screening_room_id', $seance->screeningRoom->id)->orderBy('row')->orderBy('seat_in_row')->get();
+        $seatsGroupedByRow = $seats->groupBy('row');
 
         // Pobierz rezerwacje dla danego seansu
         $reservations = Reservation::where('seance_id', $id)->pluck('id')->toArray();
