@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('SEATS');
             $table->integer('ROWS');
+            $table->decimal('PRICE_FOR_SEAT', 8, 2);
         });
     }
 

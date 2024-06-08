@@ -8,8 +8,10 @@ use App\Models\Seance;
 use App\Models\Seat;
 use App\Models\Product;
 use App\Models\ReservationProduct;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class TicketController extends Controller
@@ -127,5 +129,91 @@ class TicketController extends Controller
         }
 
         return redirect()->route('repertuar')->with('success', 'Rezerwacja zakończona sukcesem!');
+    }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function index()
+    {
+        $tickets = Ticket::orderBy('id', 'asc')->get();
+
+        return view('admin.tickets.index', compact('tickets'));
+    }
+
+    public function create()
+    {
+        return view('admin.tickets.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'reservation_id' => 'required|exists:reservations,id',
+            'voucher_id' => 'required|exists:vouchers,id',
+            'price' => 'required|numeric|min:0',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            DB::statement('BEGIN ADD_TICKET(:reservation_id, :voucher_id, :price, :status_of_payment); END;', [
+                'reservation_id' => $request->input('reservation_id'),
+                'voucher_id' => $request->input('voucher_id'),
+                'price' => $request->input('price'),
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('tickets.create')->withErrors('Błąd podczas dodawania biletu: ' . $e->getMessage());
+        }
+
+        return redirect()->route('tickets.index')->with('success', 'Bilet został dodany.');
+    }
+
+    public function edit($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        return view('admin.tickets.edit', compact('ticket'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'reservation_id' => 'required|exists:reservations,id',
+            'voucher_id' => 'required|exists:vouchers,id',
+            'price' => 'required|numeric|min:0',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            DB::statement('BEGIN UPDATE_TICKET(:id, :reservation_id, :voucher_id, :price, :status_of_payment); END;', [
+                'id' => $id,
+                'reservation_id' => $request->input('reservation_id'),
+                'voucher_id' => $request->input('voucher_id'),
+                'price' => $request->input('price'),
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('tickets.edit', $id)->withErrors('Błąd podczas aktualizacji biletu: ' . $e->getMessage());
+        }
+
+        return redirect()->route('tickets.index')->with('success', 'Bilet został zaktualizowany.');
+    }
+
+    public function destroy($id)
+    {
+        DB::beginTransaction();
+        try {
+            DB::statement('BEGIN DELETE_TICKET(:id); END;', [
+                'id' => $id,
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('tickets.index')->withErrors('Błąd podczas usuwania biletu: ' . $e->getMessage());
+        }
+
+        return redirect()->route('tickets.index')->with('success', 'Bilet został usunięty pomyślnie.');
     }
 }

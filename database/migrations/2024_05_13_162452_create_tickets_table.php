@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(Reservation::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Voucher::class)->constrained()->onDelete('cascade');
             $table->decimal('PRICE', 8, 2);
-            $table->char('STATUS_OF_PAYMENT', 1); // T lub N
+            // $table->char('STATUS_OF_PAYMENT', 1); // T lub N
         });
     }
 

@@ -16,13 +16,13 @@ class WorkerSeeder extends Seeder
         Worker::insert(
             [
                 [
-                    'NAME' => 'Bogdan', 'SURNAME' => 'Niemojewski', 'START_TIME' => '2024-05-14 08:00:00', 'END_TIME' => '2024-05-14 16:00:00'
+                    'NAME' => 'Bogdan', 'SURNAME' => 'Niemojewski',/* 'START_TIME' => '2024-05-14 08:00:00', 'END_TIME' => '2024-05-14 16:00:00'*/
                 ],
                 [
-                    'NAME' => 'Malwina', 'SURNAME' => 'Karcewicz', 'START_TIME' => '2024-05-14 08:00:00', 'END_TIME' => '2024-05-14 16:00:00'
+                    'NAME' => 'Malwina', 'SURNAME' => 'Bielecka',/* 'START_TIME' => '2024-05-14 08:00:00', 'END_TIME' => '2024-05-14 16:00:00'*/
                 ],
                 [
-                    'NAME' => 'Florian', 'SURNAME' => 'Abramowicz', 'START_TIME' => '2024-05-14 16:00:00', 'END_TIME' => '2024-05-14 22:00:00'
+                    'NAME' => 'Florian', 'SURNAME' => 'Kwaśniak',/* 'START_TIME' => '2024-05-14 16:00:00', 'END_TIME' => '2024-05-14 22:00:00'*/
                 ]
             ]
         );

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Seance;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SeanceController extends Controller
 {
@@ -29,5 +31,111 @@ class SeanceController extends Controller
             ->whereDate('START_TIME', $date)
             ->orderBy('START_TIME', 'asc')
             ->get();
+    }
+
+    public function index2()
+    {
+        $seances = Seance::orderBy('id', 'asc')->get();
+
+        return view('admin.seances.index', compact('seances'));
+    }
+
+    public function create()
+    {
+        return view('admin.seances.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'film_id' => 'required|exists:films,id',
+            'screening_room_id' => 'required|exists:screening_rooms,id',
+            'worker_id' => 'required|exists:workers,id',
+            'technology_id' => 'required|exists:technologies,id',
+            'promotion_id' => 'required|exists:promotions,id',
+            'start_time' => 'required|date_format:Y-m-d\TH:i',
+            'end_time' => 'required|date_format:Y-m-d\TH:i',
+        ]);
+
+        $start_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->input('start_time'));
+        $end_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->input('end_time'));
+
+        DB::beginTransaction();
+        try {
+            DB::statement('BEGIN ADD_SEANCE(:film_id, :screening_room_id, :worker_id, :technology_id, :promotion_id, :start_time, :end_time); END;', [
+                'film_id' => $request->input('film_id'),
+                'screening_room_id' => $request->input('screening_room_id'),
+                'worker_id' => $request->input('worker_id'),
+                'technology_id' => $request->input('technology_id'),
+                'promotion_id' => $request->input('promotion_id'),
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('seances.create')->withErrors('Błąd podczas dodawania seansu: ' . $e->getMessage());
+        }
+
+        return redirect()->route('seances.index2')->with('success', 'Seans został dodany.');
+    }
+
+    public function edit($id)
+    {
+        $seance = Seance::findOrFail($id);
+
+        return view('admin.seances.edit', compact('seance'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'film_id' => 'required|exists:films,id',
+            'screening_room_id' => 'required|exists:screening_rooms,id',
+            'worker_id' => 'required|exists:workers,id',
+            'technology_id' => 'required|exists:technologies,id',
+            'promotion_id' => 'required|exists:promotions,id',
+            'start_time' => 'required|date',
+            'end_time' => 'required|date|after:start_time',
+        ]);
+
+        $start_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->input('start_time'));
+        $end_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->input('end_time'));
+
+        DB::beginTransaction();
+        try {
+            DB::statement('BEGIN UPDATE_SEANCE(:id, :film_id, :screening_room_id, :worker_id, :technology_id, :promotion_id, :start_time, :end_time); END;', [
+                'id' => $id,
+                'film_id' => $request->input('film_id'),
+                'screening_room_id' => $request->input('screening_room_id'),
+                'worker_id' => $request->input('worker_id'),
+                'technology_id' => $request->input('technology_id'),
+                'promotion_id' => $request->input('promotion_id'),
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('seances.edit', $id)->withErrors('Błąd podczas aktualizacji seansu: ' . $e->getMessage());
+        }
+
+        return redirect()->route('seances.index2')->with('success', 'Seans został zaktualizowany.');
+    }
+
+    public function destroy($id)
+    {
+        DB::beginTransaction();
+        try {
+            DB::statement('BEGIN DELETE_SEANCE(:id); END;', [
+                'id' => $id,
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('seances.index2')->withErrors('Błąd podczas usuwania seansu: ' . $e->getMessage());
+        }
+
+        return redirect()->route('seances.index2')->with('success', 'Seans został usunięty pomyślnie.');
     }
 }

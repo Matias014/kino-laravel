@@ -10,14 +10,14 @@
     @include('shared.navbar')
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
         <h1>Filmy</h1>
     </header>
 
     @include('shared.navbar2')
 
-    <div class="container mt-5 mb-5">
+    <div class="container mt-5 mb-5 flex-grow-1">
         <div class="row mb-2">
             <a href="{{ route('films.create') }}">Dodaj nowy film</a>
         </div>

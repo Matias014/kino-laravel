@@ -11,20 +11,19 @@
 </head>
 
 <body>
+    <header>
+        <h1>Dodaj nowy produkt</h1>
+    </header>
+
     @include('shared.navbar2')
 
     <div class="container mt-5 mb-5">
 
         @include('shared.session-error')
 
-        <header>
-            <h1>Dodaj nowy produkt</h1>
-        </header>
-
-        @include('shared.validation-error')
-
         <div class="row d-flex justify-content-center">
             <div class="col-6">
+                @include('shared.validation-error')
                 <form method="POST" action="{{ route('products.store') }}" class="needs-validation" novalidate>
                     @csrf
                     <div class="form-group mb-2">

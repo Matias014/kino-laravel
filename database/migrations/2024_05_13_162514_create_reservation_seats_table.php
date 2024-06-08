@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('reservation_seats', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Reservation::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Seat::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Seat::class)->constrained()->unique()->onDelete('cascade');
         });
     }
 

@@ -10,7 +10,7 @@ class Worker extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['NAME', 'SURNAME', 'START_TIME', 'END_TIME'];
+    protected $fillable = ['NAME', 'SURNAME',/* 'START_TIME', 'END_TIME'*/];
 
     public $timestamps = false;
 

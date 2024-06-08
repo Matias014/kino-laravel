@@ -11,18 +11,18 @@
                     <div class="dropdown-content">
                         <a href="{{ route('films.index') }}">Filmy</a>
                         <a href="{{ route('products.index') }}">Produkty</a>
-                        <a href="{{ route('admin.promotions') }}">Promocje</a>
-                        <a href="{{ route('admin.reservations') }}">Rezerwacje</a>
-                        <a href="{{ route('admin.reservation_products') }}">Rezerwacje produktów</a>
-                        <a href="{{ route('admin.reservation_seats') }}">Rezerwacje miejsc</a>
-                        <a href="{{ route('admin.screening_rooms') }}">Sale kinowe</a>
-                        <a href="{{ route('admin.seances') }}">Seanse</a>
-                        <a href="{{ route('admin.seats') }}">Miejsca</a>
-                        <a href="{{ route('admin.technologies') }}">Technologie</a>
-                        <a href="{{ route('admin.tickets') }}">Bilety</a>
-                        <a href="{{ route('admin.users') }}">Użytkownicy</a>
-                        <a href="{{ route('admin.vouchers') }}">Vouchery</a>
-                        <a href="{{ route('admin.workers') }}">Pracownicy</a>
+                        <a href="{{ route('promotions.index') }}">Promocje</a>
+                        <a href="{{ route('reservations.index') }}">Rezerwacje</a>
+                        <a href="{{ route('reservation_products.index') }}">Rezerwacje produktów</a>
+                        <a href="{{ route('reservation_seats.index') }}">Rezerwacje miejsc</a>
+                        <a href="{{ route('screening_rooms.index') }}">Sale kinowe</a>
+                        <a href="{{ route('seances.index2') }}">Seanse</a>
+                        <a href="{{ route('seats.index') }}">Miejsca</a>
+                        <a href="{{ route('technologies.index') }}">Technologie</a>
+                        <a href="{{ route('tickets.index') }}">Bilety</a>
+                        <a href="{{ route('users.index') }}">Użytkownicy</a>
+                        <a href="{{ route('vouchers.index') }}">Vouchery</a>
+                        <a href="{{ route('workers.index') }}">Pracownicy</a>
                     </div>
                 </div>
             @endif

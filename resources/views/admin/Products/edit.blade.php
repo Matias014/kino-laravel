@@ -11,20 +11,19 @@
 </head>
 
 <body>
+    <header>
+        <h1>Edycja produktu {{ $product->name }}</h1>
+    </header>
+
     @include('shared.navbar2')
 
     <div class="container mt-5 mb-5">
 
         @include('shared.session-error')
 
-        <header>
-            <h1>Edycja produktu {{ $product->name }}</h1>
-        </header>
-
-        @include('shared.validation-error')
-
         <div class="row d-flex justify-content-center">
             <div class="col-6">
+                @include('shared.validation-error')
                 <form method="POST" action="{{ route('products.update', $product->id) }}" class="needs-validation"
                     novalidate>
                     @csrf

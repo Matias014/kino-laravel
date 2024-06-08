@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('NAME', 30);
             $table->string('SURNAME', 30);
-            $table->timestamp('START_TIME');
-            $table->timestamp('END_TIME');
+            // $table->timestamp('START_TIME');
+            // $table->timestamp('END_TIME');
         });
     }
 

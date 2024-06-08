@@ -10,7 +10,7 @@ class Ticket extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['reservation_id', 'voucher_id', 'PRICE', 'STATUS_OF_PAYMENT'];
+    protected $fillable = ['reservation_id', 'voucher_id', 'PRICE'/* 'STATUS_OF_PAYMENT'*/];
 
     public $timestamps = false;
 

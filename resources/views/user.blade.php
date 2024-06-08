@@ -25,6 +25,9 @@
 </head>
 
 <body>
+    <header>
+        <h1>Konto</h1>
+    </header>
     @include('shared.navbar2')
     <div class="container">
         <h1 class="text-center">Moje bilety</h1>
