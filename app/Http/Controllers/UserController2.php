@@ -11,7 +11,25 @@ class UserController2 extends Controller
 {
     public function index()
     {
-        $users = User::orderBy('id', 'asc')->get();
+        $users = [];
+
+        DB::beginTransaction();
+        try {
+            $stmt = DB::getPdo()->prepare('BEGIN user_pkg.get_all_users(:users); END;');
+            $stmt->bindParam(':users', $cursor, \PDO::PARAM_STMT);
+            $stmt->execute();
+
+            oci_execute($cursor, OCI_DEFAULT);
+            while ($row = oci_fetch_assoc($cursor)) {
+                $users[] = $row;
+            }
+            oci_free_statement($cursor);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('users.index')->withErrors('Błąd podczas pobierania użytkowników: ' . $e->getMessage());
+        }
 
         return view('admin.users.index', compact('users'));
     }
@@ -33,7 +51,7 @@ class UserController2 extends Controller
 
         DB::beginTransaction();
         try {
-            DB::statement('BEGIN ADD_USER(:name, :surname, :email, :phone_number, :password); END;', [
+            DB::statement('BEGIN user_pkg.add_user(:name, :surname, :email, :phone_number, :password); END;', [
                 'name' => $request->input('name'),
                 'surname' => $request->input('surname'),
                 'email' => $request->input('email'),
@@ -51,7 +69,24 @@ class UserController2 extends Controller
 
     public function edit($id)
     {
-        $user = User::findOrFail($id);
+        $user = null;
+
+        DB::beginTransaction();
+        try {
+            $stmt = DB::getPdo()->prepare('BEGIN user_pkg.get_user(:id, :user); END;');
+            $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+            $stmt->bindParam(':user', $cursor, \PDO::PARAM_STMT);
+            $stmt->execute();
+
+            oci_execute($cursor, OCI_DEFAULT);
+            $user = oci_fetch_assoc($cursor);
+            oci_free_statement($cursor);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('users.index')->withErrors('Błąd podczas pobierania użytkownika: ' . $e->getMessage());
+        }
 
         return view('admin.users.edit', compact('user'));
     }
@@ -69,7 +104,7 @@ class UserController2 extends Controller
         DB::beginTransaction();
         try {
             $password = $request->input('password') ? Hash::make($request->input('password')) : User::findOrFail($id)->password;
-            DB::statement('BEGIN UPDATE_USER(:id, :name, :surname, :email, :phone_number, :password); END;', [
+            DB::statement('BEGIN user_pkg.update_user(:id, :name, :surname, :email, :phone_number, :password); END;', [
                 'id' => $id,
                 'name' => $request->input('name'),
                 'surname' => $request->input('surname'),
@@ -90,7 +125,7 @@ class UserController2 extends Controller
     {
         DB::beginTransaction();
         try {
-            DB::statement('BEGIN DELETE_USER(:id); END;', [
+            DB::statement('BEGIN user_pkg.delete_user(:id); END;', [
                 'id' => $id,
             ]);
             DB::commit();

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edycja produktu {{ $product->NAME }}</title>
+    <title>Edycja produktu {{ $product['NAME'] }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     @include('shared.navbar')
@@ -12,7 +12,7 @@
 
 <body>
     <header>
-        <h1>Edycja produktu {{ $product->name }}</h1>
+        <h1>Edycja produktu {{ $product['NAME'] }}</h1>
     </header>
 
     @include('shared.navbar2')
@@ -24,7 +24,7 @@
         <div class="row d-flex justify-content-center">
             <div class="col-6">
                 @include('shared.validation-error')
-                <form method="POST" action="{{ route('products.update', $product->id) }}" class="needs-validation"
+                <form method="POST" action="{{ route('products.update', $product['ID']) }}" class="needs-validation"
                     novalidate>
                     @csrf
                     @method('PUT')
@@ -32,14 +32,14 @@
                         <label for="name" class="form-label">Nazwa</label>
                         <input id="name" name="name" type="text"
                             class="form-control @if ($errors->first('name')) is-invalid @endif"
-                            value="{{ $product->name }}">
+                            value="{{ $product['NAME'] }}">
                         <div class="invalid-feedback">Nieprawidłowa nazwa!</div>
                     </div>
                     <div class="form-group mb-2">
                         <label for="price" class="form-label">Cena</label>
                         <input id="price" name="price" type="text"
                             class="form-control @if ($errors->first('price')) is-invalid @endif"
-                            value="{{ $product->price }}">
+                            value="{{ $product['PRICE'] }}">
                         <div class="invalid-feedback">Nieprawidłowa cena!</div>
                     </div>
                     <div class="text-center mt-4 mb-4">

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edycja Użytkownika {{ $user->id }}</title>
+    <title>Edycja Użytkownika {{ $user['ID'] }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     @include('shared.navbar')
@@ -12,7 +12,7 @@
 
 <body>
     <header>
-        <h1>Edycja Użytkownika {{ $user->id }}</h1>
+        <h1>Edycja Użytkownika {{ $user['ID'] }}</h1>
     </header>
 
     @include('shared.navbar2')
@@ -24,7 +24,7 @@
         <div class="row d-flex justify-content-center">
             <div class="col-6">
                 @include('shared.validation-error')
-                <form method="POST" action="{{ route('users.update', $user->id) }}" class="needs-validation"
+                <form method="POST" action="{{ route('users.update', $user['ID']) }}" class="needs-validation"
                     novalidate>
                     @csrf
                     @method('PUT')
@@ -32,28 +32,28 @@
                         <label for="name" class="form-label">Imię</label>
                         <input id="name" name="name" type="text"
                             class="form-control @if ($errors->first('name')) is-invalid @endif"
-                            value="{{ $user->name }}">
+                            value="{{ $user['NAME'] }}">
                         <div class="invalid-feedback">Nieprawidłowe imię!</div>
                     </div>
                     <div class="form-group mb-2">
                         <label for="surname" class="form-label">Nazwisko</label>
                         <input id="surname" name="surname" type="text"
                             class="form-control @if ($errors->first('surname')) is-invalid @endif"
-                            value="{{ $user->surname }}">
+                            value="{{ $user['SURNAME'] }}">
                         <div class="invalid-feedback">Nieprawidłowe nazwisko!</div>
                     </div>
                     <div class="form-group mb-2">
                         <label for="email" class="form-label">Email</label>
                         <input id="email" name="email" type="email"
                             class="form-control @if ($errors->first('email')) is-invalid @endif"
-                            value="{{ $user->email }}">
+                            value="{{ $user['EMAIL'] }}">
                         <div class="invalid-feedback">Nieprawidłowy email!</div>
                     </div>
                     <div class="form-group mb-2">
                         <label for="phone_number" class="form-label">Numer telefonu</label>
                         <input id="phone_number" name="phone_number" type="text"
                             class="form-control @if ($errors->first('phone_number')) is-invalid @endif"
-                            value="{{ $user->phone_number }}">
+                            value="{{ $user['PHONE_NUMBER'] }}">
                         <div class="invalid-feedback">Nieprawidłowy numer telefonu!</div>
                     </div>
                     <div class="form-group mb-2">

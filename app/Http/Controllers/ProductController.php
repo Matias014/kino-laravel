@@ -10,7 +10,26 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::orderBy('id', 'asc')->get();
+        $products = [];
+
+        DB::beginTransaction();
+        try {
+            $stmt = DB::getPdo()->prepare('BEGIN product_pkg.get_all_products(:products); END;');
+            $stmt->bindParam(':products', $cursor, \PDO::PARAM_STMT);
+            $stmt->execute();
+
+            oci_execute($cursor, OCI_DEFAULT);
+            while ($row = oci_fetch_assoc($cursor)) {
+                $products[] = $row;
+            }
+            oci_free_statement($cursor);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('products.index')->withErrors('Błąd podczas pobierania produktów: ' . $e->getMessage());
+        }
+
         return view('admin.products.index', compact('products'));
     }
 
@@ -31,7 +50,7 @@ class ProductController extends Controller
 
         DB::beginTransaction();
         try {
-            DB::statement('BEGIN ADD_PRODUCT(:name, :price); END;', [
+            DB::statement('BEGIN product_pkg.add_product(:name, :price); END;', [
                 'name' => $name,
                 'price' => $price,
             ]);
@@ -44,9 +63,27 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Produkt został dodany.');
     }
 
-
-    public function edit(Product $product)
+    public function edit($id)
     {
+        $product = null;
+
+        DB::beginTransaction();
+        try {
+            $stmt = DB::getPdo()->prepare('BEGIN product_pkg.get_product(:id, :product); END;');
+            $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+            $stmt->bindParam(':product', $cursor, \PDO::PARAM_STMT);
+            $stmt->execute();
+
+            oci_execute($cursor, OCI_DEFAULT);
+            $product = oci_fetch_assoc($cursor);
+            oci_free_statement($cursor);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('products.index')->withErrors('Błąd podczas pobierania produktu: ' . $e->getMessage());
+        }
+
         return view('admin.products.edit', compact('product'));
     }
 
@@ -62,7 +99,7 @@ class ProductController extends Controller
 
         DB::beginTransaction();
         try {
-            DB::statement('BEGIN UPDATE_PRODUCT(:id, :name, :price); END;', [
+            DB::statement('BEGIN product_pkg.update_product(:id, :name, :price); END;', [
                 'id' => $id,
                 'name' => $name,
                 'price' => $price,
@@ -76,12 +113,12 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Produkt został zaktualizowany.');
     }
 
-    public function destroy(Product $product)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
-            DB::statement('BEGIN DELETE_PRODUCT(:id); END;', [
-                'id' => $product->id,
+            DB::statement('BEGIN product_pkg.delete_product(:id); END;', [
+                'id' => $id,
             ]);
             DB::commit();
         } catch (\Exception $e) {

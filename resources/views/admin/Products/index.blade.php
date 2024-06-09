@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produkty</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     @include('shared.navbar')
 </head>
 
@@ -18,10 +17,12 @@
     @include('shared.navbar2')
 
     <div class="container mt-5 mb-5">
+        @include('shared.session-error')
+
         <div class="row mb-2">
             <a href="{{ route('products.create') }}">Dodaj nowy produkt</a>
         </div>
-        @include('shared.session-error')
+
         <div class="row">
             <div class="table-responsive-sm">
                 <table class="table table-hover table-striped">
@@ -37,14 +38,14 @@
                     <tbody>
                         @forelse ($products as $product)
                             <tr>
-                                <td>{{ $product->id }}</td>
-                                <td>{{ $product->name }}</td>
-                                <td>{{ $product->price }} PLN</td>
+                                <td>{{ $product['ID'] }}</td>
+                                <td>{{ $product['NAME'] }}</td>
+                                <td>{{ number_format($product['PRICE'], 2) }} PLN</td>
                                 <td>
-                                    <a href="{{ route('products.edit', $product) }}">Edycja</a>
+                                    <a href="{{ route('products.edit', $product['ID']) }}">Edycja</a>
                                 </td>
                                 <td>
-                                    <form method="POST" action="{{ route('products.destroy', $product->id) }}">
+                                    <form method="POST" action="{{ route('products.destroy', $product['ID']) }}">
                                         @csrf
                                         @method('DELETE')
                                         <input type="submit" class="btn btn-danger" value="Usuń"

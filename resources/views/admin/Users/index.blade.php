@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Użytkownicy</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     @include('shared.navbar')
 </head>
 
@@ -42,17 +41,17 @@
                     <tbody>
                         @forelse ($users as $user)
                             <tr>
-                                <td>{{ $user->id }}</td>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->surname }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>{{ $user->phone_number }}</td>
-                                <td>{{ $user->role }}</td>
+                                <td>{{ $user['ID'] }}</td>
+                                <td>{{ $user['NAME'] }}</td>
+                                <td>{{ $user['SURNAME'] }}</td>
+                                <td>{{ $user['EMAIL'] }}</td>
+                                <td>{{ $user['PHONE_NUMBER'] }}</td>
+                                <td>{{ $user['ROLE'] }}</td>
                                 <td>
-                                    <a href="{{ route('users.edit', $user->id) }}">Edycja</a>
+                                    <a href="{{ route('users.edit', $user['ID']) }}">Edycja</a>
                                 </td>
                                 <td>
-                                    <form method="POST" action="{{ route('users.destroy', $user->id) }}">
+                                    <form method="POST" action="{{ route('users.destroy', $user['ID']) }}">
                                         @csrf
                                         @method('DELETE')
                                         <input type="submit" class="btn btn-danger" value="Usuń"
