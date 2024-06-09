@@ -31,16 +31,17 @@
     @include('shared.navbar2')
     <div class="container">
         <h1 class="text-center">Moje bilety</h1>
-        @foreach ($reservations as $reservation)
+        @foreach ($tickets as $ticket)
             <div class="reservation-card">
-                <h3>Film: {{ $reservation->seance->film->name }}</h3>
-                <p><strong>Sala:</strong> {{ $reservation->seance->screeningRoom->id }}</p>
+                <h3>Film: {{ $ticket->reservation->seance->film->name }}</h3>
+                <p><strong>Sala:</strong> {{ $ticket->reservation->seance->screeningRoom->id }}</p>
                 <p><strong>Data i godzina rozpoczęcia seansu:</strong>
-                    {{ \Carbon\Carbon::parse($reservation->seance->start_time)->format('d M Y, H:i') }}</p>
+                    {{ \Carbon\Carbon::parse($ticket->reservation->seance->start_time)->format('d M Y, H:i') }}</p>
                 <p><strong>Miejsca:</strong>
-                    @if ($reservation->reservationSeats->isNotEmpty())
-                        @foreach ($reservation->reservationSeats as $reservationSeat)
-                            rząd {{ $reservationSeat->seat->row }} - miejsce {{ $reservationSeat->seat->seat_in_row }}@if (!$loop->last)
+                    @if ($ticket->reservation->reservationSeats->isNotEmpty())
+                        @foreach ($ticket->reservation->reservationSeats as $reservationSeat)
+                            rząd {{ $reservationSeat->seat->row }} - miejsce {{ $reservationSeat->seat->seat_in_row }}
+                            @if (!$loop->last)
                                 ,
                             @endif
                         @endforeach
@@ -48,7 +49,15 @@
                         Brak danych o miejscach
                     @endif
                 </p>
-                <form method="POST" action="{{ route('user.reservations.cancel', $reservation->id) }}">
+                <p><strong>Cena biletu:</strong> {{ number_format($ticket->price, 2) }} PLN</p>
+                <p><strong>Użyty voucher:</strong>
+                    @if ($ticket->voucher)
+                        {{ $ticket->voucher->name }}
+                    @else
+                        Brak
+                    @endif
+                </p>
+                <form method="POST" action="{{ route('user.reservations.cancel', $ticket->id) }}">
                     @csrf
                     <button type="submit" class="btn btn-danger">Anuluj bilet</button>
                 </form>

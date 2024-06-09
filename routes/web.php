@@ -31,8 +31,10 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/auth/logout', 'logout')->name('logout');
 });
 
-// Nowe ścieżki do potwierdzenia zakupu
+// Ścieżka do potwierdzenia zakupu
 Route::post('/confirm_purchase', [TicketController::class, 'confirmPurchase'])->name('confirm_purchase');
+
+// Ścieżka do strony zakupu
 Route::post('/purchase', [TicketController::class, 'purchase'])->name('purchase');
 
 // Route::resource('purchase', TicketController::class);

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ReservationSeat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Reservation;
-use App\Models\ReservationSeat;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,23 +13,27 @@ class UserController extends Controller
     public function showReservations()
     {
         $user = Auth::user();
-        $reservations = Reservation::with(['seance.film', 'seance.screeningRoom', 'reservationSeats.seat'])
-            ->where('user_id', $user->id)
+        $tickets = Ticket::with(['reservation.seance.film', 'reservation.seance.screeningRoom', 'reservation.reservationSeats.seat', 'voucher'])
+            ->whereHas('reservation', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
             ->get();
 
-        return view('user', compact('user', 'reservations'));
+        return view('user', compact('user', 'tickets'));
     }
 
     public function cancelReservation($id)
     {
         $user = Auth::user();
-        $reservation = Reservation::where('id', $id)->where('user_id', $user->id)->first();
+        $ticket = Ticket::with('reservation')->where('id', $id)->whereHas('reservation', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->first();
 
-        if ($reservation) {
+        if ($ticket) {
             // Usuń powiązane miejsca rezerwacji
-            ReservationSeat::where('reservation_id', $reservation->id)->delete();
+            ReservationSeat::where('reservation_id', $ticket->reservation_id)->delete();
             // Usuń rezerwację
-            $reservation->delete();
+            $ticket->reservation->delete();
             return redirect()->route('user.reservations')->with('success', 'Rezerwacja została anulowana.');
         }
 
