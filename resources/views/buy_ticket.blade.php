@@ -85,31 +85,24 @@
         <h1 class="text-center">Kup bilet na {{ $seance->film->name }}</h1>
         <h3 class="text-center">Sala nr {{ $seance->screeningRoom->id }}</h3>
         <div class="screen">Ekran</div>
+        @include('shared.session-error')
+        @include('shared.validation-error')
         <div class="seats-container">
             @php
-                $totalSeats = $seance->screeningRoom->seats;
-                $rows = $seance->screeningRoom->rows;
-                $seatsPerRow = ceil($totalSeats / $rows);
+                $seatsGroupedByRow = $seats->groupBy('row_number');
             @endphp
 
-            @for ($currentRow = 1; $currentRow <= $rows; $currentRow++)
+            @foreach ($seatsGroupedByRow as $rowNumber => $seatsInRow)
                 <div class="row">
-                    <div class="row-number">{{ $currentRow }}</div>
-                    @for ($i = 1; $i <= $seatsPerRow; $i++)
-                        @php
-                            $seat = $seatsGroupedByRow[$currentRow][$i - 1] ?? null;
-                        @endphp
-                        @if ($seat)
-                            <div class="seat @if ($seat->vip == 'T') vip @endif @if (in_array($seat->id, $reservedSeats)) reserved @endif"
-                                data-seat-id="{{ $seat->id }}">
-                                {{ $seat->seat_in_row }}
-                            </div>
-                        @else
-                            <div class="seat empty"></div>
-                        @endif
-                    @endfor
+                    <div class="row-number">{{ $rowNumber }}</div>
+                    @foreach ($seatsInRow as $seat)
+                        <div class="seat @if ($seat->vip == 'T') vip @endif @if (in_array($seat->id, $reservedSeats)) reserved @endif"
+                            data-seat-id="{{ $seat->id }}">
+                            {{ $seat->seat_in_row }}
+                        </div>
+                    @endforeach
                 </div>
-            @endfor
+            @endforeach
         </div>
         <div class="text-center">
             <form id="reservation-form" method="POST" action="{{ route('purchase') }}">

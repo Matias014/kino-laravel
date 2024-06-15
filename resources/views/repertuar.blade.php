@@ -150,7 +150,7 @@
                         $currentDateTime = \Carbon\Carbon::now();
                         $seanceDateTime = \Carbon\Carbon::parse($seance->start_time);
                     @endphp
-                    @if ($seanceDateTime > $currentDateTime)
+                    @if ($seanceDateTime >= $currentDateTime)
                         <div class="col-md-4 d-flex seance-card" data-date="{{ $seanceDateTime->format('Y-m-d') }}">
                             <div class="card mb-4">
                                 <img src="{{ asset('storage/img/' . $seance->film->img) }}" class="card-img-top"

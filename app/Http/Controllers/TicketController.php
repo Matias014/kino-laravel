@@ -22,40 +22,49 @@ class TicketController extends Controller
         $seance = Seance::with(['film', 'screeningRoom'])->findOrFail($id);
 
         // Pobierz miejsca dla konkretnej sali kinowej i uporządkuj według numeru rzędu i miejsca w rzędzie
-        $seats = Seat::where('screening_room_id', $seance->screeningRoom->id)->orderBy('row')->orderBy('seat_in_row')->get();
-        $seatsGroupedByRow = $seats->groupBy('row');
+        $seats = Seat::where('screening_room_id', $seance->screeningRoom->id)
+            ->orderBy('row_number')
+            ->orderBy('seat_in_row')
+            ->get();
+        $seatsGroupedByRow = $seats->groupBy('row_number');
 
         // Pobierz rezerwacje dla danego seansu
         $reservations = Reservation::where('seance_id', $id)->pluck('id')->toArray();
         $reservedSeats = ReservationSeat::whereIn('reservation_id', $reservations)->pluck('seat_id')->toArray();
 
-        return view('buy_ticket', compact('seance', 'seatsGroupedByRow', 'reservedSeats'));
+        return view('buy_ticket', compact('seance', 'seats', 'seatsGroupedByRow', 'reservedSeats'));
     }
 
     public function purchase(Request $request)
     {
         $seance = Seance::with(['film', 'screeningRoom', 'promotion'])->findOrFail($request->input('seance_id'));
         $seats = json_decode($request->input('seats'), true);
+
+        // Sprawdzenie, czy wybrano co najmniej jedno miejsce
+        if (empty($seats)) {
+            return redirect()->back()->withErrors('Proszę wybrać co najmniej jedno miejsce.');
+        }
+
         $totalBasePrice = 0;
         $totalDiscount = 0;
         $totalFinalPrice = 0;
 
         foreach ($seats as &$seat) {
             $seatModel = Seat::findOrFail($seat['id']);
-            $seatPrice = $seatModel->vip == 'T' ? $seance->screeningRoom->price_for_seat * 2 : $seance->screeningRoom->price_for_seat; // miejsce vip to 100% drożej
 
-            $basePrice = $seatPrice;
-            $discount = 0;
+            // Oblicz cenę biletu przy użyciu PL/SQL
+            $priceInfo = DB::selectOne('SELECT * FROM TABLE(calculate_ticket_price(:seance_id, :seat_id))', [
+                'seance_id' => $seance->id,
+                'seat_id' => $seatModel->id,
+            ]);
 
-            // sprawdzanie czy seans ma promocje i czy zawiera sie w czasie promocji
-            if ($seance->promotion && $seance->promotion->start_time <= $seance->start_time && $seance->promotion->end_time >= $seance->end_time) {
-                $discount = $seatPrice * $seance->promotion->discount / 100;
-                $seatPrice -= $discount;
-            }
+            $basePrice = $priceInfo->base_price;
+            $discount = $priceInfo->discount;
+            $finalPrice = $priceInfo->final_price;
 
             $totalBasePrice += $basePrice;
             $totalDiscount += $discount;
-            $totalFinalPrice += $seatPrice;
+            $totalFinalPrice += $finalPrice;
 
             $seat['row'] = $seatModel->row;
             $seat['seat_in_row'] = $seatModel->seat_in_row;
@@ -82,6 +91,7 @@ class TicketController extends Controller
             'vouchers' => $vouchers,
         ]);
     }
+
 
     public function confirmPurchase(Request $request)
     {

@@ -2,7 +2,6 @@
     <div class="links">
         <a href="{{ route('index') }}">Strona główna</a>
         <a href="{{ route('repertuar') }}">Repertuar</a>
-        <a href="#Kontakt">Kontakt</a>
         @if (Auth::check())
             <a href="{{ route('user.reservations') }}">Konto</a>
             @if (Auth::user()->role == 'admin')

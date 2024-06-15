@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ScreeningRoom;
+use App\Models\Seat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,17 +25,44 @@ class ScreeningRoomController extends Controller
     {
         $request->validate([
             'seats' => 'required|integer|min:1',
-            'rows' => 'required|integer|min:1',
+            'number_of_rows' => 'required|integer|min:1',
             'price_for_seat' => 'required|numeric|min:1',
         ]);
 
+        $seats = $request->input('seats');
+        $rows = $request->input('number_of_rows');
+        $priceForSeat = $request->input('price_for_seat');
+
         DB::beginTransaction();
         try {
-            DB::statement('BEGIN ADD_SCREENING_ROOM(:seats, :rows, :price_for_seat); END;', [
-                'seats' => $request->input('seats'),
-                'rows' => $request->input('rows'),
-                'price_for_seat' => $request->input('price_for_seat'),
+            // Tworzenie nowej sali kinowej za pomocą surowego zapytania SQL
+            $screeningRoomId = DB::table('screening_rooms')->insertGetId([
+                'seats' => $seats,
+                'number_of_rows' => $rows,
+                'price_for_seat' => $priceForSeat,
             ]);
+
+            // Obliczanie liczby miejsc w rzędach
+            $seatsPerRow = intdiv($seats, $rows);
+            $remainingSeats = $seats % $rows;
+
+            // Dodawanie miejsc za pomocą procedury PL/SQL
+            for ($row = 1; $row <= $rows; $row++) {
+                $seatsInCurrentRow = $seatsPerRow;
+                if ($row == $rows) {
+                    $seatsInCurrentRow += $remainingSeats;
+                }
+
+                for ($seat = 1; $seat <= $seatsInCurrentRow; $seat++) {
+                    DB::statement('BEGIN ADD_SEAT(:screening_room_id, :row_number, :seat_in_row, :vip); END;', [
+                        'screening_room_id' => $screeningRoomId,
+                        'row_number' => $row,
+                        'seat_in_row' => $seat,
+                        'vip' => 'N', // Możesz dostosować logikę ustawiania VIP
+                    ]);
+                }
+            }
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
@@ -55,16 +83,16 @@ class ScreeningRoomController extends Controller
     {
         $request->validate([
             'seats' => 'required|integer|min:1',
-            'rows' => 'required|integer|min:1',
+            'number_of_rows' => 'required|integer|min:1',
             'price_for_seat' => 'required|numeric|min:1',
         ]);
 
         DB::beginTransaction();
         try {
-            DB::statement('BEGIN UPDATE_SCREENING_ROOM(:id, :seats, :rows, :price_for_seat); END;', [
+            DB::statement('BEGIN UPDATE_SCREENING_ROOM(:id, :seats, :number_of_rows, :price_for_seat); END;', [
                 'id' => $id,
                 'seats' => $request->input('seats'),
-                'rows' => $request->input('rows'),
+                'number_of_rows' => $request->input('number_of_rows'),
                 'price_for_seat' => $request->input('price_for_seat'),
             ]);
             DB::commit();

@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('seats', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(ScreeningRoom::class)->constrained()->onDelete('cascade');
-            $table->integer('ROW');
+            $table->integer('ROW_NUMBER');
             $table->integer('SEAT_IN_ROW');
             $table->char('VIP', 1);
         });

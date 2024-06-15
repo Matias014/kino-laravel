@@ -43,7 +43,7 @@
                             <tr>
                                 <td>{{ $seat->id }}</td>
                                 <td>{{ $seat->screening_room_id }}</td>
-                                <td>{{ $seat->row }}</td>
+                                <td>{{ $seat->row_number }}</td>
                                 <td>{{ $seat->seat_in_row }}</td>
                                 <td>{{ $seat->vip }}</td>
                                 <td>

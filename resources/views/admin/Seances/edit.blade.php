@@ -70,13 +70,13 @@
                             value="{{ $seance->start_time }}">
                         <div class="invalid-feedback">Nieprawidłowy czas rozpoczęcia!</div>
                     </div>
-                    <div class="form-group mb-2">
+                    {{-- <div class="form-group mb-2">
                         <label for="end_time" class="form-label">Czas Zakończenia</label>
                         <input id="end_time" name="end_time" type="datetime-local"
                             class="form-control @if ($errors->first('end_time')) is-invalid @endif"
                             value="{{ $seance->end_time }}">
                         <div class="invalid-feedback">Nieprawidłowy czas zakończenia!</div>
-                    </div>
+                    </div> --}}
                     <div class="text-center mt-4 mb-4">
                         <input class="btn btn-success" type="submit" value="Wyślij">
                     </div>

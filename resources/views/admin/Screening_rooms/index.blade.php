@@ -42,7 +42,7 @@
                             <tr>
                                 <td>{{ $screeningRoom->id }}</td>
                                 <td>{{ $screeningRoom->seats }}</td>
-                                <td>{{ $screeningRoom->rows }}</td>
+                                <td>{{ $screeningRoom->number_of_rows }}</td>
                                 <td>{{ $screeningRoom->price_for_seat }}</td>
                                 <td>
                                     <a href="{{ route('screening_rooms.edit', $screeningRoom->id) }}">Edycja</a>

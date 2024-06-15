@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Film;
 use App\Models\Seance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -28,9 +29,33 @@ class SeanceController extends Controller
     private function getSeancesByDate($date)
     {
         return Seance::with(['film', 'screeningRoom', 'worker', 'technology', 'promotion'])
-            ->whereDate('START_TIME', $date)
-            ->orderBy('START_TIME', 'asc')
+            ->whereDate('start_time', $date)
+            ->orderBy('start_time', 'asc')
             ->get();
+    }
+
+    public function show($id)
+    {
+        $filmDetail = null;
+
+        DB::beginTransaction();
+        try {
+            $stmt = DB::getPdo()->prepare('BEGIN :result := get_film_detail(:id); END;');
+            $stmt->bindParam(':id', $id, \PDO::PARAM_INT);
+            $stmt->bindParam(':result', $result, \PDO::PARAM_STMT);
+            $stmt->execute();
+
+            oci_execute($result, OCI_DEFAULT);
+            $filmDetail = oci_fetch_assoc($result);
+            oci_free_statement($result);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('repertuar')->withErrors('Błąd podczas pobierania szczegółów filmu: ' . $e->getMessage());
+        }
+
+        return view('repertuar', compact('filmDetail'));
     }
 
     public function index2()
@@ -42,7 +67,8 @@ class SeanceController extends Controller
 
     public function create()
     {
-        return view('admin.seances.create');
+        $films = Film::all(); // Pobierz wszystkie filmy, aby wybrać odpowiedni film przy tworzeniu seansu
+        return view('admin.seances.create', compact('films'));
     }
 
     public function store(Request $request)
@@ -54,11 +80,12 @@ class SeanceController extends Controller
             'technology_id' => 'required|exists:technologies,id',
             'promotion_id' => 'required|exists:promotions,id',
             'start_time' => 'required|date_format:Y-m-d\TH:i',
-            'end_time' => 'required|date_format:Y-m-d\TH:i',
         ]);
 
+        $film = Film::findOrFail($request->input('film_id'));
         $start_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->input('start_time'));
-        $end_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->input('end_time'));
+        $duration = (int) $film->duration; // Rzutowanie DURATION na int
+        $end_time = $start_time->copy()->addMinutes($duration);
 
         DB::beginTransaction();
         try {
@@ -83,8 +110,9 @@ class SeanceController extends Controller
     public function edit($id)
     {
         $seance = Seance::findOrFail($id);
+        $films = Film::all(); // Pobierz wszystkie filmy, aby wybrać odpowiedni film przy edycji seansu
 
-        return view('admin.seances.edit', compact('seance'));
+        return view('admin.seances.edit', compact('seance', 'films'));
     }
 
     public function update(Request $request, $id)
@@ -95,12 +123,13 @@ class SeanceController extends Controller
             'worker_id' => 'required|exists:workers,id',
             'technology_id' => 'required|exists:technologies,id',
             'promotion_id' => 'required|exists:promotions,id',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date|after:start_time',
+            'start_time' => 'required|date_format:Y-m-d\TH:i',
         ]);
 
+        $film = Film::findOrFail($request->input('film_id'));
         $start_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->input('start_time'));
-        $end_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->input('end_time'));
+        $duration = (int) $film->duration; // Rzutowanie DURATION na int
+        $end_time = $start_time->copy()->addMinutes($duration);
 
         DB::beginTransaction();
         try {

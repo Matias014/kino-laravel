@@ -16,7 +16,13 @@ class PromotionSeeder extends Seeder
         Promotion::insert(
             [
                 [
-                    'DISCOUNT' => 10, 'START_TIME' => '2024-05-14 08:00:00', 'END_TIME' => '2024-05-14 10:00:00'
+                    'DISCOUNT' => 10, 'START_TIME' => '2024-05-14 08:00:00', 'END_TIME' => '2024-08-14 10:00:00'
+                ],
+                [
+                    'DISCOUNT' => 15, 'START_TIME' => '2024-05-14 08:00:00', 'END_TIME' => '2024-08-14 10:00:00'
+                ],
+                [
+                    'DISCOUNT' => 12, 'START_TIME' => '2024-05-14 08:00:00', 'END_TIME' => '2024-08-14 10:00:00'
                 ]
             ]
         );

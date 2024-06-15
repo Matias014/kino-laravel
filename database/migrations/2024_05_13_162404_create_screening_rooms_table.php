@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('screening_rooms', function (Blueprint $table) {
             $table->id();
             $table->integer('SEATS');
-            $table->integer('ROWS');
+            $table->integer('NUMBER_OF_ROWS');
             $table->decimal('PRICE_FOR_SEAT', 8, 2);
         });
     }

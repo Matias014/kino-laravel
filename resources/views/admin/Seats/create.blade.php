@@ -34,10 +34,10 @@
                         <div class="invalid-feedback">Nieprawidłowy ID sali projekcyjnej!</div>
                     </div>
                     <div class="form-group mb-2">
-                        <label for="row" class="form-label">Rząd</label>
-                        <input id="row" name="row" type="number"
-                            class="form-control @if ($errors->first('row')) is-invalid @endif"
-                            value="{{ old('row') }}">
+                        <label for="row_number" class="form-label">Rząd</label>
+                        <input id="row_number" name="row_number" type="number"
+                            class="form-control @if ($errors->first('row_number')) is-invalid @endif"
+                            value="{{ old('row_number') }}">
                         <div class="invalid-feedback">Nieprawidłowy rząd!</div>
                     </div>
                     <div class="form-group mb-2">
@@ -51,7 +51,7 @@
                         <label for="vip" class="form-label">VIP</label>
                         <select id="vip" name="vip"
                             class="form-control @if ($errors->first('vip')) is-invalid @endif">
-                            <option value="Y" {{ old('vip') == 'Y' ? 'selected' : '' }}>Tak</option>
+                            <option value="T" {{ old('vip') == 'T' ? 'selected' : '' }}>Tak</option>
                             <option value="N" {{ old('vip') == 'N' ? 'selected' : '' }}>Nie</option>
                         </select>
                         <div class="invalid-feedback">Nieprawidłowy wybór VIP!</div>

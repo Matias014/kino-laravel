@@ -16,10 +16,10 @@ class ScreeningRoomSeeder extends Seeder
         ScreeningRoom::insert(
             [
                 [
-                    'SEATS' => 100, 'ROWS' => 10, 'PRICE_FOR_SEAT' => 16.5,
+                    'SEATS' => 100, 'NUMBER_OF_ROWS' => 10, 'PRICE_FOR_SEAT' => 16.5,
                 ],
                 [
-                    'SEATS' => 120, 'ROWS' => 12, 'PRICE_FOR_SEAT' => 18.5,
+                    'SEATS' => 120, 'NUMBER_OF_ROWS' => 12, 'PRICE_FOR_SEAT' => 18.5,
                 ]
             ]
         );

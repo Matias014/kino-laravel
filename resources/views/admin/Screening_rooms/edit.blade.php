@@ -36,10 +36,10 @@
                         <div class="invalid-feedback">Nieprawidłowa liczba miejsc!</div>
                     </div>
                     <div class="form-group mb-2">
-                        <label for="rows" class="form-label">Liczba rzędów</label>
-                        <input id="rows" name="rows" type="number"
+                        <label for="number_of_rows" class="form-label">Liczba rzędów</label>
+                        <input id="number_of_rows" name="number_of_rows" type="number"
                             class="form-control @if ($errors->first('rows')) is-invalid @endif"
-                            value="{{ $screeningRoom->rows }}">
+                            value="{{ $screeningRoom->number_of_rows }}">
                         <div class="invalid-feedback">Nieprawidłowa liczba rzędów!</div>
                     </div>
                     <div class="form-group mb-2">

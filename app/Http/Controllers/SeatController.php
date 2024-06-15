@@ -24,16 +24,16 @@ class SeatController extends Controller
     {
         $request->validate([
             'screening_room_id' => 'required|exists:screening_rooms,id',
-            'row' => 'required|integer|min:1',
+            'row_number' => 'required|integer|min:1',
             'seat_in_row' => 'required|integer|min:1',
-            'vip' => 'required|in:Y,N',
+            'vip' => 'required|in:T,N',
         ]);
 
         DB::beginTransaction();
         try {
-            DB::statement('BEGIN ADD_SEAT(:screening_room_id, :row, :seat_in_row, :vip); END;', [
+            DB::statement('BEGIN ADD_SEAT(:screening_room_id, :row_number, :seat_in_row, :vip); END;', [
                 'screening_room_id' => $request->input('screening_room_id'),
-                'row' => $request->input('row'),
+                'row_number' => $request->input('row_number'),
                 'seat_in_row' => $request->input('seat_in_row'),
                 'vip' => $request->input('vip'),
             ]);
@@ -57,17 +57,17 @@ class SeatController extends Controller
     {
         $request->validate([
             'screening_room_id' => 'required|exists:screening_rooms,id',
-            'row' => 'required|integer|min:1',
+            'row_number' => 'required|integer|min:1',
             'seat_in_row' => 'required|integer|min:1',
-            'vip' => 'required|in:Y,N',
+            'vip' => 'required|in:T,N',
         ]);
 
         DB::beginTransaction();
         try {
-            DB::statement('BEGIN UPDATE_SEAT(:id, :screening_room_id, :row, :seat_in_row, :vip); END;', [
+            DB::statement('BEGIN UPDATE_SEAT(:id, :screening_room_id, :row_number, :seat_in_row, :vip); END;', [
                 'id' => $id,
                 'screening_room_id' => $request->input('screening_room_id'),
-                'row' => $request->input('row'),
+                'row_number' => $request->input('row_number'),
                 'seat_in_row' => $request->input('seat_in_row'),
                 'vip' => $request->input('vip'),
             ]);

@@ -27,10 +27,15 @@
                 <form method="POST" action="{{ route('seances.store') }}" class="needs-validation" novalidate>
                     @csrf
                     <div class="form-group mb-2">
-                        <label for="film_id" class="form-label">ID Filmu</label>
-                        <input id="film_id" name="film_id" type="text"
-                            class="form-control @if ($errors->first('film_id')) is-invalid @endif"
-                            value="{{ old('film_id') }}">
+                        <label for="film_id" class="form-label">Film</label>
+                        <select id="film_id" name="film_id"
+                            class="form-control @if ($errors->first('film_id')) is-invalid @endif">
+                            @foreach ($films as $film)
+                                <option value="{{ $film->id }}" {{ old('film_id') == $film->id ? 'selected' : '' }}>
+                                    {{ $film->name }}
+                                </option>
+                            @endforeach
+                        </select>
                         <div class="invalid-feedback">Nieprawidłowy ID filmu!</div>
                     </div>
                     <div class="form-group mb-2">
@@ -68,13 +73,7 @@
                             value="{{ old('start_time') }}">
                         <div class="invalid-feedback">Nieprawidłowy czas rozpoczęcia!</div>
                     </div>
-                    <div class="form-group mb-2">
-                        <label for="end_time" class="form-label">Czas Zakończenia</label>
-                        <input id="end_time" name="end_time" type="datetime-local"
-                            class="form-control @if ($errors->first('end_time')) is-invalid @endif"
-                            value="{{ old('end_time') }}">
-                        <div class="invalid-feedback">Nieprawidłowy czas zakończenia!</div>
-                    </div>
+                    <!-- Usunięcie pola end_time -->
                     <div class="text-center mt-4 mb-4">
                         <input class="btn btn-success" type="submit" value="Dodaj">
                     </div>
