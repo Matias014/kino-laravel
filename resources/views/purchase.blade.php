@@ -42,19 +42,19 @@
             <h3>Szczegóły rezerwacji:</h3>
             <p><strong>Film:</strong> {{ $seance->film->name }}</p>
             <p><strong>Sala:</strong> {{ $seance->screeningRoom->id }}</p>
-            <p><strong>Data i godzina:</strong> {{ \Carbon\Carbon::parse($seance->start_time)->format('d M Y, H:i') }}
-            </p>
+            <p><strong>Data i godzina:</strong>
+                {{ \Carbon\Carbon::parse($seance->start_time)->locale('pl')->translatedFormat('d F Y, H:i') }}</p>
             <p><strong>Liczba miejsc:</strong> {{ count($seats) }}</p>
             <p><strong>Wybrane miejsca:</strong>
                 @foreach ($seats as $seat)
-                    rząd {{ $seat['row'] }} - miejsce {{ $seat['seat_in_row'] }}@if (!$loop->last)
+                    rząd {{ $seat['row_number'] }} - miejsce {{ $seat['seat_in_row'] }}@if (!$loop->last)
                         ,
                     @endif
                 @endforeach
             </p>
             <p><strong>Łączny koszt bez promocji:</strong> <span
                     id="totalBasePrice">{{ number_format($totalBasePrice, 2) }}</span> PLN</p>
-            <p><strong>Wartość promocji ({{ $seance->promotion->discount }}%):</strong> <span
+            <p><strong>Wartość promocji ({{ $seance->promotion ? $seance->promotion->discount : 0 }}%):</strong> <span
                     id="totalDiscount">{{ number_format($totalDiscount, 2) }}</span> PLN</p>
             <p><strong>Łączny koszt po promocji:</strong> <span
                     id="totalFinalPrice">{{ number_format($totalFinalPrice, 2) }}</span> PLN</p>

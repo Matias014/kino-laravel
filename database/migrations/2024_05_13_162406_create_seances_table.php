@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignIdFor(ScreeningRoom::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Worker::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Technology::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Promotion::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Promotion::class)->nullable()->constrained()->onDelete('cascade');
             $table->timestamp('START_TIME');
             $table->timestamp('END_TIME');
         });

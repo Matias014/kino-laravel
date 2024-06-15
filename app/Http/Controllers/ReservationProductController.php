@@ -36,7 +36,11 @@ class ReservationProductController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('reservation_products.create')->withErrors('Błąd podczas dodawania rezerwacji produktu: ' . $e->getMessage());
+            if ($e->getCode() == 20001) {
+                return redirect()->route('reservation_products.create')->withErrors('Nie można zarezerwować ten sam produkt co najmniej 2 razy na tą samą rezerwację.');
+            } else {
+                return redirect()->route('reservation_products.create')->withErrors('Błąd podczas dodawania rezerwacji produktu: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('reservation_products.index')->with('success', 'Rezerwacja produktu została dodana.');
@@ -68,7 +72,11 @@ class ReservationProductController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('reservation_products.edit', $id)->withErrors('Błąd podczas aktualizacji rezerwacji produktu: ' . $e->getMessage());
+            if ($e->getCode() == 20001) {
+                return redirect()->route('reservation_products.edit', $id)->withErrors('Nie można zarezerwować ten sam produkt co najmniej 2 razy na tą samą rezerwację.');
+            } else {
+                return redirect()->route('reservation_products.edit', $id)->withErrors('Błąd podczas aktualizacji rezerwacji produktu: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('reservation_products.index')->with('success', 'Rezerwacja produktu została zaktualizowana.');

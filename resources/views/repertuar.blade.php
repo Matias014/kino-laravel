@@ -164,7 +164,9 @@
                                         <strong>Czas trwania:</strong> {{ $seance->film->duration }} minut<br>
                                         <strong>Gatunek:</strong> {{ $seance->film->genre }}<br>
                                         <strong>Technologia wyświetlania:</strong> {{ $seance->technology->name }}<br>
-                                        <strong>Promocja:</strong> {{ $seance->promotion->discount }}%<br>
+                                        @if ($seance->promotion)
+                                            <strong>Promocja:</strong> {{ $seance->promotion->discount }}%<br>
+                                        @endif
                                     </p>
                                     @if (Auth::check())
                                         <a href="/seances/{{ $seance->id }}/buy" class="btn btn-primary">Kup
@@ -230,7 +232,7 @@
                                                         <strong>Czas trwania:</strong> ${seance.film.duration} minut<br>
                                                         <strong>Gatunek:</strong> ${seance.film.genre}<br>
                                                         <strong>Technologia wyświetlania:</strong> ${seance.technology.name}<br>
-                                                        <strong>Promocja:</strong> ${seance.promotion.discount}%<br>
+                                                        ${seance.promotion ? `<strong>Promocja:</strong> ${seance.promotion.discount}%<br>` : ''}
                                                     </p>
                                                     @if (Auth::check())
                                                     <a href="/seances/${seance.id}/buy" class="btn btn-primary">Kup bilet</a>

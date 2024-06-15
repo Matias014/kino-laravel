@@ -36,7 +36,11 @@ class ReservationSeatController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('reservation_seats.create')->withErrors('Błąd podczas dodawania rezerwacji miejsca: ' . $e->getMessage());
+            if ($e->getCode() == 20001) {
+                return redirect()->route('reservation_seats.create')->withErrors('Nie można zarezerwować to samo miejsceco najmniej 2 razy na tą samą rezerwację.');
+            } else {
+                return redirect()->route('reservation_seats.create')->withErrors('Błąd podczas dodawania rezerwacji miejsca: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('reservation_seats.index')->with('success', 'Rezerwacja miejsca została dodana.');
@@ -66,7 +70,11 @@ class ReservationSeatController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('reservation_seats.edit', $id)->withErrors('Błąd podczas aktualizacji rezerwacji miejsca: ' . $e->getMessage());
+            if ($e->getCode() == 20001) {
+                return redirect()->route('reservation_seats.edit', $id)->withErrors('Nie można zarezerwować to samo miejsceco najmniej 2 razy na tą samą rezerwację.');
+            } else {
+                return redirect()->route('reservation_seats.edit', $id)->withErrors('Błąd podczas aktualizacji rezerwacji miejsca: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('reservation_seats.index')->with('success', 'Rezerwacja miejsca została zaktualizowana.');

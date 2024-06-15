@@ -66,7 +66,7 @@ class TicketController extends Controller
             $totalDiscount += $discount;
             $totalFinalPrice += $finalPrice;
 
-            $seat['row'] = $seatModel->row;
+            $seat['row_number'] = $seatModel->row_number;
             $seat['seat_in_row'] = $seatModel->seat_in_row;
         }
 
@@ -91,7 +91,6 @@ class TicketController extends Controller
             'vouchers' => $vouchers,
         ]);
     }
-
 
     public function confirmPurchase(Request $request)
     {

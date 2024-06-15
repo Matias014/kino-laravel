@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Seat;
+use App\Models\ScreeningRoom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,6 +30,25 @@ class SeatController extends Controller
             'vip' => 'required|in:T,N',
         ]);
 
+        // Pobierz informacje o sali kinowej
+        $screeningRoom = ScreeningRoom::findOrFail($request->input('screening_room_id'));
+
+        // Sprawdź zakresy
+        if ($request->input('row_number') > $screeningRoom->number_of_rows || $request->input('row_number') < 1) {
+            return redirect()->route('seats.create')->withErrors('Numer rzędu wykracza poza dozwolony zakres dla tej sali.');
+        }
+
+        $seatsPerRow = intdiv($screeningRoom->seats, $screeningRoom->number_of_rows);
+        $remainingSeats = $screeningRoom->seats % $screeningRoom->number_of_rows;
+
+        if ($request->input('row_number') == $screeningRoom->number_of_rows) {
+            $seatsPerRow += $remainingSeats;
+        }
+
+        if ($request->input('seat_in_row') > $seatsPerRow || $request->input('seat_in_row') < 1) {
+            return redirect()->route('seats.create')->withErrors('Numer miejsca w rzędzie wykracza poza dozwolony zakres dla tej sali.');
+        }
+
         DB::beginTransaction();
         try {
             DB::statement('BEGIN ADD_SEAT(:screening_room_id, :row_number, :seat_in_row, :vip); END;', [
@@ -40,7 +60,12 @@ class SeatController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('seats.create')->withErrors('Błąd podczas dodawania miejsca: ' . $e->getMessage());
+            // Sprawdź, czy wyjątek jest związany z dodaniem zduplikowanego miejsca
+            if ($e->getCode() == '20001') {
+                return redirect()->route('seats.create')->withErrors('Miejsce o podanym numerze rzędu i numerze miejsca w rzędzie już istnieje w tej sali projekcyjnej.');
+            } else {
+                return redirect()->route('seats.create')->withErrors('Błąd podczas dodawania miejsca: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('seats.index')->with('success', 'Miejsce zostało dodane.');
@@ -62,6 +87,25 @@ class SeatController extends Controller
             'vip' => 'required|in:T,N',
         ]);
 
+        // Pobierz informacje o sali kinowej
+        $screeningRoom = ScreeningRoom::findOrFail($request->input('screening_room_id'));
+
+        // Sprawdź zakresy
+        if ($request->input('row_number') > $screeningRoom->number_of_rows || $request->input('row_number') < 1) {
+            return redirect()->route('seats.edit', $id)->withErrors('Numer rzędu wykracza poza dozwolony zakres dla tej sali.');
+        }
+
+        $seatsPerRow = intdiv($screeningRoom->seats, $screeningRoom->number_of_rows);
+        $remainingSeats = $screeningRoom->seats % $screeningRoom->number_of_rows;
+
+        if ($request->input('row_number') == $screeningRoom->number_of_rows) {
+            $seatsPerRow += $remainingSeats;
+        }
+
+        if ($request->input('seat_in_row') > $seatsPerRow || $request->input('seat_in_row') < 1) {
+            return redirect()->route('seats.edit', $id)->withErrors('Numer miejsca w rzędzie wykracza poza dozwolony zakres dla tej sali.');
+        }
+
         DB::beginTransaction();
         try {
             DB::statement('BEGIN UPDATE_SEAT(:id, :screening_room_id, :row_number, :seat_in_row, :vip); END;', [
@@ -74,7 +118,12 @@ class SeatController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('seats.edit', $id)->withErrors('Błąd podczas aktualizacji miejsca: ' . $e->getMessage());
+            // Sprawdź, czy wyjątek jest związany z dodaniem zduplikowanego miejsca
+            if ($e->getCode() == '20001') {
+                return redirect()->route('seats.edit', $id)->withErrors('Miejsce o podanym numerze rzędu i numerze miejsca w rzędzie już istnieje w tej sali projekcyjnej.');
+            } else {
+                return redirect()->route('seats.edit', $id)->withErrors('Błąd podczas aktualizacji miejsca: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('seats.index')->with('success', 'Miejsce zostało zaktualizowane.');

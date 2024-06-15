@@ -36,11 +36,11 @@
                 <h3>Film: {{ $ticket->reservation->seance->film->name }}</h3>
                 <p><strong>Sala:</strong> {{ $ticket->reservation->seance->screeningRoom->id }}</p>
                 <p><strong>Data i godzina rozpoczęcia seansu:</strong>
-                    {{ \Carbon\Carbon::parse($ticket->reservation->seance->start_time)->format('d M Y, H:i') }}</p>
+                    {{ \Carbon\Carbon::parse($ticket->reservation->seance->start_time)->locale('pl')->translatedFormat('d F Y, H:i') }}</p>
                 <p><strong>Miejsca:</strong>
                     @if ($ticket->reservation->reservationSeats->isNotEmpty())
                         @foreach ($ticket->reservation->reservationSeats as $reservationSeat)
-                            rząd {{ $reservationSeat->seat->row }} - miejsce {{ $reservationSeat->seat->seat_in_row }}
+                            rząd {{ $reservationSeat->seat->row_number }} - miejsce {{ $reservationSeat->seat->seat_in_row }}
                             @if (!$loop->last)
                                 ,
                             @endif

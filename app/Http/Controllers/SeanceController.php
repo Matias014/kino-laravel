@@ -78,7 +78,7 @@ class SeanceController extends Controller
             'screening_room_id' => 'required|exists:screening_rooms,id',
             'worker_id' => 'required|exists:workers,id',
             'technology_id' => 'required|exists:technologies,id',
-            'promotion_id' => 'required|exists:promotions,id',
+            'promotion_id' => 'nullable|exists:promotions,id',
             'start_time' => 'required|date_format:Y-m-d\TH:i',
         ]);
 
@@ -101,7 +101,12 @@ class SeanceController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('seances.create')->withErrors('Błąd podczas dodawania seansu: ' . $e->getMessage());
+            // Sprawdź czy błąd jest związany z kolizją seansu
+            if ($e->getCode() == 20003) {
+                return redirect()->route('seances.create')->withErrors('Seans koliduje z innym seansem czasowo w tej samej sali kinowej.');
+            } else {
+                return redirect()->route('seances.create')->withErrors('Błąd podczas dodawania seansu: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('seances.index2')->with('success', 'Seans został dodany.');
@@ -122,7 +127,7 @@ class SeanceController extends Controller
             'screening_room_id' => 'required|exists:screening_rooms,id',
             'worker_id' => 'required|exists:workers,id',
             'technology_id' => 'required|exists:technologies,id',
-            'promotion_id' => 'required|exists:promotions,id',
+            'promotion_id' => 'nullable|exists:promotions,id',
             'start_time' => 'required|date_format:Y-m-d\TH:i',
         ]);
 
@@ -146,7 +151,11 @@ class SeanceController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('seances.edit', $id)->withErrors('Błąd podczas aktualizacji seansu: ' . $e->getMessage());
+            if ($e->getCode() == 20003) {
+                return redirect()->route('seances.edit')->withErrors('Seans koliduje z innym seansem czasowo w tej samej sali kinowej.');
+            } else {
+                return redirect()->route('seances.edit')->withErrors('Błąd podczas aktualizacji seansu: ' . $e->getMessage());
+            }
         }
 
         return redirect()->route('seances.index2')->with('success', 'Seans został zaktualizowany.');

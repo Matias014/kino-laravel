@@ -36,11 +36,11 @@
                         <div class="invalid-feedback">Nieprawidłowy ID filmu!</div>
                     </div>
                     <div class="form-group mb-2">
-                        <label for="screening_room_id" class="form-label">ID Sali Projekcyjnej</label>
+                        <label for="screening_room_id" class="form-label">ID Sali Kinowej</label>
                         <input id="screening_room_id" name="screening_room_id" type="text"
                             class="form-control @if ($errors->first('screening_room_id')) is-invalid @endif"
                             value="{{ $seance->screening_room_id }}">
-                        <div class="invalid-feedback">Nieprawidłowy ID sali projekcyjnej!</div>
+                        <div class="invalid-feedback">Nieprawidłowy ID sali kinowej!</div>
                     </div>
                     <div class="form-group mb-2">
                         <label for="worker_id" class="form-label">ID Pracownika</label>
