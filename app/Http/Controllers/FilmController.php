@@ -33,7 +33,7 @@ class FilmController extends Controller
             'description' => 'required|string|max:1000',
             'duration' => 'required|string|max:10',
             'genre' => 'required|string|max:60',
-            'img' => 'nullable|image|max:1024', // max 1MB
+            'img' => 'required|image|max:1024', // max 1MB
         ]);
 
         // $input = [
@@ -96,7 +96,7 @@ class FilmController extends Controller
             'description' => 'required|string|max:1000',
             'duration' => 'required|string|max:10',
             'genre' => 'required|string|max:60',
-            'img' => 'nullable|image|max:1024', // max 1MB
+            'img' => 'required|image|max:1024', // max 1MB
         ]);
 
         // $input = [

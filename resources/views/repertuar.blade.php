@@ -209,40 +209,44 @@
 
                             const currentDateTime = new Date();
 
-                            if (data.length === 0) {
+                            let hasFutureSeances = false;
+
+                            data.forEach(seance => {
+                                const seanceDateTime = new Date(seance.start_time);
+
+                                if (seanceDateTime > currentDateTime) {
+                                    hasFutureSeances = true;
+                                    const card = document.createElement('div');
+                                    card.classList.add('col-md-4', 'd-flex',
+                                        'seance-card');
+                                    card.innerHTML = `
+                                        <div class="card mb-4">
+                                            <img src="storage/img/${seance.film.img}" class="card-img-top" alt="${seance.film.name}">
+                                            <div class="card-body d-flex flex-column justify-content-around">
+                                                <h5 class="card-title">${seance.film.name}</h5>
+                                                <p class="card-text">${seance.film.description}</p>
+                                                <p class="card-text">
+                                                    <strong>Rozpoczęcie seansu:</strong> ${seanceDateTime.toLocaleString()}<br>
+                                                    <strong>Czas trwania:</strong> ${seance.film.duration} minut<br>
+                                                    <strong>Gatunek:</strong> ${seance.film.genre}<br>
+                                                    <strong>Technologia wyświetlania:</strong> ${seance.technology.name}<br>
+                                                    ${seance.promotion ? `<strong>Promocja:</strong> ${seance.promotion.discount}%<br>` : ''}
+                                                </p>
+                                                @if (Auth::check())
+                                                <a href="/seances/${seance.id}/buy" class="btn btn-primary">Kup bilet</a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    `;
+                                    seanceCardsContainer.appendChild(card);
+                                }
+                            });
+
+                            if (!hasFutureSeances) {
                                 noSeancesMessage.innerHTML = `Brak seansów na ${selectedDate}`;
                                 noSeancesMessage.style.display = 'block';
                             } else {
                                 noSeancesMessage.style.display = 'none';
-                                data.forEach(seance => {
-                                    const seanceDateTime = new Date(seance.start_time);
-
-                                    if (seanceDateTime > currentDateTime) {
-                                        const card = document.createElement('div');
-                                        card.classList.add('col-md-4', 'd-flex',
-                                            'seance-card');
-                                        card.innerHTML = `
-                                            <div class="card mb-4">
-                                                <img src="storage/img/${seance.film.img}" class="card-img-top" alt="${seance.film.name}">
-                                                <div class="card-body d-flex flex-column justify-content-around">
-                                                    <h5 class="card-title">${seance.film.name}</h5>
-                                                    <p class="card-text">${seance.film.description}</p>
-                                                    <p class="card-text">
-                                                        <strong>Rozpoczęcie seansu:</strong> ${seanceDateTime.toLocaleString()}<br>
-                                                        <strong>Czas trwania:</strong> ${seance.film.duration} minut<br>
-                                                        <strong>Gatunek:</strong> ${seance.film.genre}<br>
-                                                        <strong>Technologia wyświetlania:</strong> ${seance.technology.name}<br>
-                                                        ${seance.promotion ? `<strong>Promocja:</strong> ${seance.promotion.discount}%<br>` : ''}
-                                                    </p>
-                                                    @if (Auth::check())
-                                                    <a href="/seances/${seance.id}/buy" class="btn btn-primary">Kup bilet</a>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        `;
-                                        seanceCardsContainer.appendChild(card);
-                                    }
-                                });
                             }
                         });
                 });

@@ -7,10 +7,17 @@
     <title>Moje Rezerwacje</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
         .container {
             max-width: 800px;
             margin: auto;
             padding: 20px;
+            flex: 1;
         }
 
         .reservation-card {
@@ -19,6 +26,13 @@
             border: 1px solid #ccc;
             border-radius: 10px;
             background-color: #f9f9f9;
+        }
+
+        footer {
+            background-color: #201919;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
         }
     </style>
     @include('shared.navbar')
@@ -36,11 +50,13 @@
                 <h3>Film: {{ $ticket->reservation->seance->film->name }}</h3>
                 <p><strong>Sala:</strong> {{ $ticket->reservation->seance->screeningRoom->id }}</p>
                 <p><strong>Data i godzina rozpoczęcia seansu:</strong>
-                    {{ \Carbon\Carbon::parse($ticket->reservation->seance->start_time)->locale('pl')->translatedFormat('d F Y, H:i') }}</p>
+                    {{ \Carbon\Carbon::parse($ticket->reservation->seance->start_time)->locale('pl')->translatedFormat('d F Y, H:i') }}
+                </p>
                 <p><strong>Miejsca:</strong>
                     @if ($ticket->reservation->reservationSeats->isNotEmpty())
                         @foreach ($ticket->reservation->reservationSeats as $reservationSeat)
-                            rząd {{ $reservationSeat->seat->row_number }} - miejsce {{ $reservationSeat->seat->seat_in_row }}
+                            rząd {{ $reservationSeat->seat->row_number }} - miejsce
+                            {{ $reservationSeat->seat->seat_in_row }}
                             @if (!$loop->last)
                                 ,
                             @endif
@@ -72,7 +88,9 @@
             </form>
         </div>
     </div>
-    @include('shared.footer')
+    <footer>
+        <p>© 2024 Kino M&M. Wszystkie prawa zastrzeżone.</p>
+    </footer>
 </body>
 
 </html>

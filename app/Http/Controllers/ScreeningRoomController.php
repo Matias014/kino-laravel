@@ -44,23 +44,24 @@ class ScreeningRoomController extends Controller
 
             // Obliczanie liczby miejsc w rzędach
             $seatsPerRow = intdiv($seats, $rows);
-            $remainingSeats = $seats % $rows;
+            // $remainingSeats = $seats % $rows;
 
             // Dodawanie miejsc za pomocą procedury PL/SQL
-            for ($row = 1; $row <= $rows; $row++) {
-                $seatsInCurrentRow = $seatsPerRow;
-                if ($row == $rows) {
-                    $seatsInCurrentRow += $remainingSeats;
-                }
+            $currentRow = 1;
+            while ($seats > 0) {
+                $seatsInCurrentRow = min($seatsPerRow, $seats);
 
                 for ($seat = 1; $seat <= $seatsInCurrentRow; $seat++) {
                     DB::statement('BEGIN ADD_SEAT(:screening_room_id, :row_number, :seat_in_row, :vip); END;', [
                         'screening_room_id' => $screeningRoomId,
-                        'row_number' => $row,
+                        'row_number' => $currentRow,
                         'seat_in_row' => $seat,
                         'vip' => 'N', // Możesz dostosować logikę ustawiania VIP
                     ]);
                 }
+
+                $seats -= $seatsInCurrentRow;
+                $currentRow++;
             }
 
             DB::commit();
