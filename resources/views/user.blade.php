@@ -83,8 +83,10 @@
             <a href="{{ route('user.edit') }}" class="btn btn-warning">Edytuj dane</a>
             <form method="POST" action="{{ route('user.delete') }}" style="display:inline;">
                 @csrf
-                <button type="submit" class="btn btn-danger"
-                    onclick="return confirm('Czy na pewno chcesz usunąć konto?')">Usuń konto</button>
+                @if (Auth::user()->role != "admin")
+                    <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Czy na pewno chcesz usunąć konto?')">Usuń konto</button>
+                @endif
             </form>
         </div>
     </div>

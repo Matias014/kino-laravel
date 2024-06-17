@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ReservationProduct;
 use App\Models\Ticket;
 use App\Models\Voucher;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -43,6 +44,15 @@ class TicketController extends Controller
         // Sprawdzenie, czy wybrano co najmniej jedno miejsce
         if (empty($seats)) {
             return redirect()->back()->withErrors('Proszę wybrać co najmniej jedno miejsce.');
+        }
+
+        // Sprawdzenie, czy rezerwacja jest dokonywana co najmniej 30 minut przed seansem
+        $currentDateTime = Carbon::now();
+        $seanceStartTime = Carbon::parse($seance->start_time);
+        $minutesUntilSeance = $currentDateTime->diffInMinutes($seanceStartTime, false);
+
+        if ($minutesUntilSeance < 30) {
+            return redirect()->back()->withErrors('Rezerwacja musi być dokonana co najmniej 30 minut przed seansem.');
         }
 
         $totalBasePrice = 0;

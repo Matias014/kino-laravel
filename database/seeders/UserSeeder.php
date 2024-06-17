@@ -22,36 +22,36 @@ class UserSeeder extends Seeder
                 'PASSWORD' => bcrypt('123')
             ],
             [
-                'NAME' => 'Jane',
-                'SURNAME' => 'Smith',
-                'EMAIL' => 'jane@example.com',
+                'NAME' => 'Adam',
+                'SURNAME' => 'Nowak',
+                'EMAIL' => 'adam@example.com',
                 'PHONE_NUMBER' => '987654321',
                 'ROLE' => 'user',
                 'PASSWORD' => bcrypt('123')
             ],
             [
-                'NAME' => 'Alice',
-                'SURNAME' => 'Johnson',
-                'EMAIL' => 'alice.johnson@example.com',
+                'NAME' => 'Alicja',
+                'SURNAME' => 'Korzenna',
+                'EMAIL' => 'alicja@example.com',
                 'PHONE_NUMBER' => '456123789',
                 'ROLE' => 'user',
-                'PASSWORD' => bcrypt('password123')
+                'PASSWORD' => bcrypt('123')
             ],
             [
-                'NAME' => 'Bob',
-                'SURNAME' => 'Brown',
-                'EMAIL' => 'bob.brown@example.com',
+                'NAME' => 'Jerzy',
+                'SURNAME' => 'Dąbrowicz',
+                'EMAIL' => 'jerzy@example.com',
                 'PHONE_NUMBER' => '789456123',
                 'ROLE' => 'user',
-                'PASSWORD' => bcrypt('password123')
+                'PASSWORD' => bcrypt('123')
             ],
             [
-                'NAME' => 'Charlie',
-                'SURNAME' => 'Davis',
-                'EMAIL' => 'charlie.davis@example.com',
+                'NAME' => 'Katarzyna',
+                'SURNAME' => 'Siewierska',
+                'EMAIL' => 'katarzyna@example.com',
                 'PHONE_NUMBER' => '321654987',
                 'ROLE' => 'user',
-                'PASSWORD' => bcrypt('password123')
+                'PASSWORD' => bcrypt('123')
             ],
         ]);
     }

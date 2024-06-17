@@ -152,9 +152,9 @@ class SeanceController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             if ($e->getCode() == 20003) {
-                return redirect()->route('seances.edit')->withErrors('Seans koliduje z innym seansem czasowo w tej samej sali kinowej.');
+                return redirect()->route('seances.edit', $id)->withErrors('Seans koliduje z innym seansem czasowo w tej samej sali kinowej.');
             } else {
-                return redirect()->route('seances.edit')->withErrors('Błąd podczas aktualizacji seansu: ' . $e->getMessage());
+                return redirect()->route('seances.edit', $id)->withErrors('Błąd podczas aktualizacji seansu: ' . $e->getMessage());
             }
         }
 

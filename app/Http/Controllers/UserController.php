@@ -6,6 +6,7 @@ use App\Models\ReservationSeat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -53,20 +54,28 @@ class UserController extends Controller
             'name' => 'required|string|max:30',
             'surname' => 'required|string|max:30',
             'email' => 'required|string|email|max:40|unique:users,email,' . $user->id,
-            'phone_number' => 'required|string|max:15',
-            'password' => 'nullable|string|max:100|confirmed'
+            'phone_number' => 'required|integer|digits:9',
+            'password' => 'nullable|string'
         ]);
 
-        $user->name = $request->input('name');
-        $user->surname = $request->input('surname');
-        $user->email = $request->input('email');
-        $user->phone_number = $request->input('phone_number');
+        DB::beginTransaction();
+        try {
+            $password = $request->filled('password') ? Hash::make($request->input('password')) : $user->password;
 
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->input('password'));
+            DB::statement('BEGIN user_pkg.update_user(:id, :name, :surname, :email, :phone_number, :password); END;', [
+                'id' => $user->id,
+                'name' => $request->input('name'),
+                'surname' => $request->input('surname'),
+                'email' => $request->input('email'),
+                'phone_number' => $request->input('phone_number'),
+                'password' => $password,
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('user.edit')->withErrors('Błąd podczas aktualizacji użytkownika: ' . $e->getMessage());
         }
-
-        $user->save();
 
         return redirect()->route('user.reservations')->with('success', 'Dane zostały zaktualizowane.');
     }

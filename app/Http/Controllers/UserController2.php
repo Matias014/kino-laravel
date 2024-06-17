@@ -97,7 +97,7 @@ class UserController2 extends Controller
             'name' => 'required|string|max:30',
             'surname' => 'required|string|max:30',
             'email' => 'required|string|email|max:40|unique:users,email,' . $id,
-            'phone_number' => 'required|string|max:9',
+            'phone_number' => 'required|integer|digits:9',
             'password' => 'nullable|string',
         ]);
 

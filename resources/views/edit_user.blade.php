@@ -13,6 +13,8 @@
     @include('shared.navbar2')
     <div class="container mt-5">
         <h1 class="text-center">Edytuj swoje dane</h1>
+        @include('shared.session-error')
+        @include('shared.validation-error')
         <form method="POST" action="{{ route('user.update') }}">
             @csrf
             <div class="mb-3">
@@ -38,10 +40,6 @@
             <div class="mb-3">
                 <label for="password" class="form-label">Nowe hasło (pozostaw puste, jeśli nie chcesz zmieniać)</label>
                 <input type="password" class="form-control" id="password" name="password">
-            </div>
-            <div class="mb-3">
-                <label for="password_confirmation" class="form-label">Potwierdź nowe hasło</label>
-                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
             </div>
             <button type="submit" class="btn btn-primary">Zapisz</button>
         </form>
