@@ -28,7 +28,6 @@
             <a href="{{ route('logout') }}">{{ Auth::user()->name }}, wyloguj się</a>
         @else
             <a class="nav-link" href="{{ route('login') }}">Zaloguj się</a>
-            {{-- <a class="nav-link" href="{{ route('register') }}">Zarejestruj się</a> --}}
         @endif
     </div>
 </nav>

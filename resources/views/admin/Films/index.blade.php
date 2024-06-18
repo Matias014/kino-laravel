@@ -10,7 +10,7 @@
     @include('shared.navbar')
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body>
     <header>
         <h1>Filmy</h1>
     </header>

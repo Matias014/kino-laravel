@@ -92,17 +92,6 @@
         </div>
     </section>
 
-    <section id="Repertuar" class="styled-section">
-        <h2>Repertuar</h2>
-        <p>Sprawdź nasze różnorodne oferty filmowe. Wybierz seanse z filmami, które najbardziej Cię zainteresują!</p>
-    </section>
-
-    <section id="Kontakt" class="styled-section">
-        <h2>Skontaktuj się z nami</h2>
-        <p>Wyślij email na adres biuro@m&m.pl lub zadzwoń do nas pod numer 733 029 199, aby uzyskać więcej informacji.
-        </p>
-    </section>
-
     <footer>
         <p>© 2024 Kino M&M. Wszystkie prawa zastrzeżone.</p>
     </footer>

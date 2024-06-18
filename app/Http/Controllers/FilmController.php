@@ -36,13 +36,6 @@ class FilmController extends Controller
             'img' => 'required|image|max:1024', // max 1MB
         ]);
 
-        // $input = [
-        //     'NAME' => $request->name,
-        //     'DESCRIPTION' => $request->description,
-        //     'DURATION' => $request->duration,
-        //     'GENRE' => $request->genre,
-        // ];
-
         $name = $request->input('name');
         $description = $request->input('description');
         $duration = $request->input('duration');
@@ -72,8 +65,6 @@ class FilmController extends Controller
             return redirect()->route('films.create')->withErrors('Błąd podczas dodawania filmu: ' . $e->getMessage());
         }
 
-        // Film::create($input);
-
         return redirect()->route('films.index')->with('success', 'Film został dodany.');
     }
 
@@ -99,14 +90,7 @@ class FilmController extends Controller
             'img' => 'required|image|max:1024', // max 1MB
         ]);
 
-        // $input = [
-        //     'NAME' => $request->name,
-        //     'DESCRIPTION' => $request->description,
-        //     'DURATION' => $request->duration,
-        //     'GENRE' => $request->genre,
-        // ];
-
-        $imageName = $film->img; // Zachowaj aktualną nazwę obrazka
+        $imageName = $film->img;
 
         $name = $request->input('name');
         $description = $request->input('description');
@@ -120,9 +104,7 @@ class FilmController extends Controller
             $input['IMG'] = $imageName;
         }
 
-        $img = $imageName; // Upewnij się, że img nie jest NULL
-
-        // $film->update($input);
+        $img = $imageName;
 
         DB::beginTransaction();
         try {
@@ -145,7 +127,6 @@ class FilmController extends Controller
 
     public function destroy(Film $film)
     {
-        // $film->delete();
         DB::beginTransaction();
         try {
             DB::statement('BEGIN DELETE_FILM(:id); END;', [
