@@ -1,4 +1,4 @@
-<footer class='fixed-bottom'>
+<footer>
     <p>© 2024 Kino M&M. Wszystkie prawa zastrzeżone.</p>
 </footer>
 

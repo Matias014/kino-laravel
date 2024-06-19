@@ -14,232 +14,234 @@ class SeanceSeeder extends Seeder
      */
     public function run(): void
     {
-        Seance::insert([
+        $seances = [
             [
-                'film_id' => 1,
+                'film_id' => 1, // Avengers: Koniec gry
                 'screening_room_id' => 1,
                 'worker_id' => 1,
                 'technology_id' => 1,
                 'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 3, 12, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 3, 12, 16, 0)
+                'start_time' => Carbon::create(2024, 6, 18, 12, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 18, 15, 1, 0)
             ],
             [
-                'film_id' => 12,
+                'film_id' => 2, // Batman
                 'screening_room_id' => 2,
                 'worker_id' => 2,
                 'technology_id' => 2,
                 'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 2, 20, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 2, 21, 46, 0)
+                'start_time' => Carbon::create(2024, 6, 18, 16, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 18, 18, 6, 0)
             ],
             [
-                'film_id' => 23,
+                'film_id' => 3, // Incepcja
                 'screening_room_id' => 1,
                 'worker_id' => 1,
                 'technology_id' => 1,
                 'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 3, 18, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 3, 19, 58, 0)
+                'start_time' => Carbon::create(2024, 6, 18, 19, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 18, 21, 28, 0)
             ],
             [
-                'film_id' => 2,
+                'film_id' => 4, // Interstellar
                 'screening_room_id' => 2,
                 'worker_id' => 2,
                 'technology_id' => 2,
                 'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 4, 16, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 4, 18, 6, 0)
+                'start_time' => Carbon::create(2024, 6, 19, 12, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 19, 14, 49, 0)
             ],
             [
-                'film_id' => 3,
+                'film_id' => 5, // Skazani na Shawshank
                 'screening_room_id' => 1,
                 'worker_id' => 1,
                 'technology_id' => 1,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 5, 18, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 5, 20, 28, 0)
-            ],
-            [
-                'film_id' => 4,
-                'screening_room_id' => 2,
-                'worker_id' => 2,
-                'technology_id' => 2,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 6, 20, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 6, 22, 49, 0)
-            ],
-            [
-                'film_id' => 5,
-                'screening_room_id' => 1,
-                'worker_id' => 1,
-                'technology_id' => 1,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 7, 14, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 7, 16, 22, 0)
-            ],
-            [
-                'film_id' => 6,
-                'screening_room_id' => 2,
-                'worker_id' => 2,
-                'technology_id' => 2,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 8, 16, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 8, 18, 42, 0)
-            ],
-            [
-                'film_id' => 7,
-                'screening_room_id' => 1,
-                'worker_id' => 1,
-                'technology_id' => 1,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 9, 18, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 9, 20, 33, 0)
-            ],
-            [
-                'film_id' => 8,
-                'screening_room_id' => 2,
-                'worker_id' => 2,
-                'technology_id' => 2,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 10, 20, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 10, 22, 44, 0)
-            ],
-            [
-                'film_id' => 9,
-                'screening_room_id' => 1,
-                'worker_id' => 1,
-                'technology_id' => 1,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 11, 14, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 11, 16, 14, 0)
-            ],
-            [
-                'film_id' => 10,
-                'screening_room_id' => 2,
-                'worker_id' => 2,
-                'technology_id' => 2,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 12, 16, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 12, 18, 45, 0)
-            ],
-            [
-                'film_id' => 11,
-                'screening_room_id' => 1,
-                'worker_id' => 1,
-                'technology_id' => 1,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 13, 18, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 13, 19, 46, 0)
-            ],
-            [
-                'film_id' => 13,
-                'screening_room_id' => 1,
-                'worker_id' => 1,
-                'technology_id' => 1,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 14, 14, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 14, 15, 52, 0)
-            ],
-            [
-                'film_id' => 14,
-                'screening_room_id' => 2,
-                'worker_id' => 2,
-                'technology_id' => 2,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 15, 16, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 15, 18, 46, 0)
-            ],
-            [
-                'film_id' => 15,
-                'screening_room_id' => 1,
-                'worker_id' => 1,
-                'technology_id' => 1,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 16, 18, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 16, 19, 34, 0)
-            ],
-            [
-                'film_id' => 16,
-                'screening_room_id' => 2,
-                'worker_id' => 2,
-                'technology_id' => 2,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 17, 20, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 17, 21, 48, 0)
-            ],
-            [
-                'film_id' => 17,
-                'screening_room_id' => 1,
-                'worker_id' => 1,
-                'technology_id' => 1,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 18, 14, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 18, 16, 4, 0)
-            ],
-            [
-                'film_id' => 18,
-                'screening_room_id' => 2,
-                'worker_id' => 2,
-                'technology_id' => 2,
                 'promotion_id' => 1,
                 'start_time' => Carbon::create(2024, 6, 19, 16, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 19, 17, 58, 0)
+                'end_time' => Carbon::create(2024, 6, 19, 18, 22, 0)
             ],
             [
-                'film_id' => 19,
-                'screening_room_id' => 1,
-                'worker_id' => 1,
-                'technology_id' => 1,
-                'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 20, 18, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 20, 19, 47, 0)
-            ],
-            [
-                'film_id' => 20,
+                'film_id' => 6, // Avatar
                 'screening_room_id' => 2,
                 'worker_id' => 2,
                 'technology_id' => 2,
                 'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 21, 20, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 21, 22, 32, 0)
+                'start_time' => Carbon::create(2024, 6, 19, 19, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 19, 21, 42, 0)
             ],
             [
-                'film_id' => 21,
+                'film_id' => 7, // Bękarty wojny
                 'screening_room_id' => 1,
                 'worker_id' => 1,
                 'technology_id' => 1,
                 'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 22, 14, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 22, 15, 48, 0)
+                'start_time' => Carbon::create(2024, 6, 20, 12, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 20, 14, 33, 0)
             ],
             [
-                'film_id' => 22,
+                'film_id' => 8, // Blade Runner 2049
                 'screening_room_id' => 2,
                 'worker_id' => 2,
                 'technology_id' => 2,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 20, 16, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 20, 18, 44, 0)
+            ],
+            [
+                'film_id' => 9, // Bohemian Rhapsody
+                'screening_room_id' => 1,
+                'worker_id' => 1,
+                'technology_id' => 1,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 20, 19, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 20, 21, 14, 0)
+            ],
+            [
+                'film_id' => 10, // Django
+                'screening_room_id' => 2,
+                'worker_id' => 2,
+                'technology_id' => 2,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 21, 12, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 21, 14, 45, 0)
+            ],
+            [
+                'film_id' => 11, // Dunkierka
+                'screening_room_id' => 1,
+                'worker_id' => 1,
+                'technology_id' => 1,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 21, 16, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 21, 17, 46, 0)
+            ],
+            [
+                'film_id' => 12, // Dystrykt 9
+                'screening_room_id' => 2,
+                'worker_id' => 2,
+                'technology_id' => 2,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 21, 19, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 21, 20, 52, 0)
+            ],
+            [
+                'film_id' => 13, // Faceci w czerni
+                'screening_room_id' => 1,
+                'worker_id' => 1,
+                'technology_id' => 1,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 22, 12, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 22, 13, 38, 0)
+            ],
+            [
+                'film_id' => 14, // Furia
+                'screening_room_id' => 2,
+                'worker_id' => 2,
+                'technology_id' => 2,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 22, 16, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 22, 18, 14, 0)
+            ],
+            [
+                'film_id' => 15, // Gwiezdne wojny: część III - Zemsta Sithów
+                'screening_room_id' => 1,
+                'worker_id' => 1,
+                'technology_id' => 1,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 22, 19, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 22, 21, 20, 0)
+            ],
+            [
+                'film_id' => 16, // Jak wytresować smoka
+                'screening_room_id' => 2,
+                'worker_id' => 2,
+                'technology_id' => 2,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 23, 12, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 23, 13, 38, 0)
+            ],
+            [
+                'film_id' => 17, // Król Lew
+                'screening_room_id' => 1,
+                'worker_id' => 1,
+                'technology_id' => 1,
                 'promotion_id' => 1,
                 'start_time' => Carbon::create(2024, 6, 23, 16, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 23, 17, 53, 0)
+                'end_time' => Carbon::create(2024, 6, 23, 17, 28, 0)
             ],
             [
-                'film_id' => 24,
+                'film_id' => 18, // Marsjanin
                 'screening_room_id' => 2,
                 'worker_id' => 2,
                 'technology_id' => 2,
                 'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 24, 20, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 24, 21, 54, 0)
+                'start_time' => Carbon::create(2024, 6, 23, 19, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 23, 21, 24, 0)
             ],
             [
-                'film_id' => 25,
+                'film_id' => 19, // Matrix
                 'screening_room_id' => 1,
                 'worker_id' => 1,
                 'technology_id' => 1,
                 'promotion_id' => 1,
-                'start_time' => Carbon::create(2024, 6, 25, 14, 0, 0),
-                'end_time' => Carbon::create(2024, 6, 25, 15, 53, 0)
-            ]
-        ]);
+                'start_time' => Carbon::create(2024, 6, 24, 12, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 24, 14, 16, 0)
+            ],
+            [
+                'film_id' => 20, // Ratatuj
+                'screening_room_id' => 2,
+                'worker_id' => 2,
+                'technology_id' => 2,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 24, 16, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 24, 17, 51, 0)
+            ],
+            [
+                'film_id' => 21, // Sherlock Holmes
+                'screening_room_id' => 1,
+                'worker_id' => 1,
+                'technology_id' => 1,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 24, 19, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 24, 21, 8, 0)
+            ],
+            [
+                'film_id' => 22, // Strażnicy Galaktyki
+                'screening_room_id' => 2,
+                'worker_id' => 2,
+                'technology_id' => 2,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 25, 12, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 25, 14, 1, 0)
+            ],
+            [
+                'film_id' => 23, // Szybcy i wściekli
+                'screening_room_id' => 1,
+                'worker_id' => 1,
+                'technology_id' => 1,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 25, 16, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 25, 17, 47, 0)
+            ],
+            [
+                'film_id' => 24, // Titanic
+                'screening_room_id' => 2,
+                'worker_id' => 2,
+                'technology_id' => 2,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 25, 19, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 25, 22, 15, 0)
+            ],
+            [
+                'film_id' => 25, // WALL-E
+                'screening_room_id' => 1,
+                'worker_id' => 1,
+                'technology_id' => 1,
+                'promotion_id' => 1,
+                'start_time' => Carbon::create(2024, 6, 26, 12, 0, 0),
+                'end_time' => Carbon::create(2024, 6, 26, 13, 38, 0)
+            ],
+        ];
+
+        Seance::insert($seances);
     }
 }
