@@ -4,7 +4,7 @@ call composer install
 
 call composer require yajra/laravel-oci8
 
-call php artisan migrate:fresh
+call php artisan migrate:fresh --seed
 
 call php artisan key:generate
 
