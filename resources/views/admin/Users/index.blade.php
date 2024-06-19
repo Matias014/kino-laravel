@@ -51,6 +51,9 @@
                                     <a href="{{ route('users.edit', $user['ID']) }}">Edycja</a>
                                 </td>
                                 <td>
+                                    @if ($user['ROLE'] == "admin")
+                                        @continue
+                                    @endif
                                     <form method="POST" action="{{ route('users.destroy', $user['ID']) }}">
                                         @csrf
                                         @method('DELETE')
